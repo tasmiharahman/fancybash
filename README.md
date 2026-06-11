@@ -41,6 +41,11 @@ One-line install custom bashrc setup with safe config (Node, Bun friendly).
 ```bash
 bash <(curl -fsSL https://gist.githubusercontent.com/rihadjahanopu/a1c286e48b3ecee1a207c759279e352c/raw/install.sh)
 ```
+## Uninstall
+```bash
+sed -i '/# >>> opu-bashrc >>>/,/# <<< opu-bashrc <<</d' ~/.bashrc && source ~/.bashrc
+```
+
 ```
 ohmybash/
 ├── install.sh      # The magic installer (safe & idempotent)
