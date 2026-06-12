@@ -19,7 +19,7 @@ _Beautiful • Fast • Smart • Zero Bloat_
 
 [![MIT License](https://img.shields.io/badge/License-MIT-a855f7?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 [![Shell](https://img.shields.io/badge/Shell-Bash-22c55e?style=for-the-badge&logo=gnubash&logoColor=white)](https://www.gnu.org/software/bash/)
-[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS-0ea5e9?style=for-the-badge&logo=linux&logoColor=white)](#)
+[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-0ea5e9?style=for-the-badge&logo=linux&logoColor=white)](#)
 [![Stars](https://img.shields.io/github/stars/rihadjahanopu/fancybash?style=for-the-badge&logo=github&color=f59e0b&logoColor=white)](https://github.com/rihadjahanopu/fancybash)
 [![Version](https://img.shields.io/badge/Version-2.0-ec4899?style=for-the-badge)](#)
 
@@ -103,10 +103,16 @@ bash <(curl -fsSL https://gist.githubusercontent.com/rihadjahanopu/a1c286e48b3ec
 zsh <(curl -fsSL https://gist.githubusercontent.com/rihadjahanopu/raw/73539d01666e7cc834cb0cdf20ac92915322dc99/config.zsh)
 ```
 
+**For PowerShell (`$PROFILE`):**
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex (irm https://gist.githubusercontent.com/rihadjahanopu/a1c286e48b3ecee1a207c759279e352c/raw/install.ps1)
+```
+
 The installer will:
 
 1. ✅ Check for existing installation (safe to re-run)
-2. 💾 Create a timestamped backup of your current `.bashrc`
+2. 💾 Create a timestamped backup of your current shell configuration
 3. 📥 Download and append the config with boundary markers
 4. 🔄 Automatically reload your shell
 
@@ -123,6 +129,9 @@ source ~/.bashrc
 # For Zsh:
 cat config.zsh >> ~/.zshrc
 source ~/.zshrc
+
+# For PowerShell:
+.\install.ps1
 ```
 
 ---
@@ -141,6 +150,13 @@ sed -i '/# >>> fancy-bashrc >>>/,/# <<< fancy-bashrc <<</d' ~/.bashrc && source 
 
 ```zsh
 sed -i '/# >>> fancy-zshrc >>>/,/# <<< fancy-zshrc <<</d' ~/.zshrc && source ~/.zshrc
+```
+
+**For PowerShell:**
+
+```powershell
+# Run in PowerShell to remove the config block:
+$p = $PROFILE; (Get-Content $p -Raw) -replace '(?s)# >>> fancy-powershell >>>.*?# <<< fancy-powershell <<<\s*', '' | Set-Content $p
 ```
 
 ---
@@ -398,8 +414,10 @@ uu
 fancybash/
 ├── install.sh      # Bash installer with spinner & backup
 ├── install.zsh     # Zsh installer with spinner & backup
+├── install.ps1     # PowerShell installer with backup & profile integration
 ├── config.sh       # Bash configuration, aliases, prompt, colors
 ├── config.zsh      # Zsh configuration, aliases, prompt, colors
+├── config.ps1      # PowerShell configuration, aliases, prompt, colors
 ├── README.md       # You are here
 └── LICENSE         # MIT — free to use, fork, and modify
 ```
