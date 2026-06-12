@@ -464,7 +464,7 @@ Install a fully-configured `settings.json` for the [Zed](https://zed.dev) editor
 ### One-Line Install
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/rihadjahanopu/fancybash/main/zed/install-settings.sh)
+bash <(curl -fsSL https://gist.githubusercontent.com/rihadjahanopu/bb56371f87793c21a8fad4e4b9815a9b/raw/install-settings.sh)
 ```
 
 The script will:
@@ -479,21 +479,21 @@ The script will:
 
 ### What's included
 
-| Setting | Value |
-| ------- | ----- |
-| Theme | `BlackFox` (dark) / `Everforest Light Hard` (light) |
-| Buffer Font | `Cascadia Code` 22px (fallback: JetBrains Mono, Fira Code) |
-| UI Font | `JetBrains Mono` 20px |
-| Terminal Font | `JetBrains Mono` 22px + `FiraCode Nerd Font` fallback |
-| Tab Size | `2` spaces |
-| Soft Wrap | `editor_width` |
-| Autosave | `on_focus_change` |
-| Keymap | `VSCode` |
-| Inlay Hints | Enabled with background |
-| Inline Diagnostics | Enabled |
-| Minimap | `auto` |
-| Prettier | Allowed |
-| Git Inline Blame | With commit summary |
+| Setting            | Value                                                      |
+| ------------------ | ---------------------------------------------------------- |
+| Theme              | `BlackFox` (dark) / `Everforest Light Hard` (light)        |
+| Buffer Font        | `Cascadia Code` 22px (fallback: JetBrains Mono, Fira Code) |
+| UI Font            | `JetBrains Mono` 20px                                      |
+| Terminal Font      | `JetBrains Mono` 22px + `FiraCode Nerd Font` fallback      |
+| Tab Size           | `2` spaces                                                 |
+| Soft Wrap          | `editor_width`                                             |
+| Autosave           | `on_focus_change`                                          |
+| Keymap             | `VSCode`                                                   |
+| Inlay Hints        | Enabled with background                                    |
+| Inline Diagnostics | Enabled                                                    |
+| Minimap            | `auto`                                                     |
+| Prettier           | Allowed                                                    |
+| Git Inline Blame   | With commit summary                                        |
 
 ---
 
