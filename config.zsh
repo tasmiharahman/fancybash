@@ -3,7 +3,7 @@ setopt PROMPT_SUBST
 
 
 # ==============================================================================
-#   ULTRA-THIN COMPACT PRO BASH ENVIRONMENT
+#   ULTRA-THIN COMPACT PRO Zsh ENVIRONMENT
 #   Author: [Rihad Jahan Opu]
 #   Version: 1.0.0 Complete Multi-Distro Edition
 #   Purpose: A fast, beautiful, and productive terminal for Web Development
