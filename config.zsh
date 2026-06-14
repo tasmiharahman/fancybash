@@ -466,6 +466,25 @@ uu() {
             pacman) sudo pacman -Sy --noconfirm fzf ;;
             dnf) sudo dnf install -y fzf ;;
         esac
+
+        # ZSH FIX: Reload command hash + check common paths
+        hash -r 2>/dev/null || true
+        if ! command -v fzf &>/dev/null; then
+            local p
+            for p in /usr/bin/fzf /usr/local/bin/fzf /usr/share/doc/fzf/bin/fzf ~/.fzf/bin/fzf; do
+                if [[ -x "$p" ]]; then
+                    export PATH="${PATH}:$(dirname "$p")"
+                    hash -r 2>/dev/null || true
+                    break
+                fi
+            done
+        fi
+    fi
+
+    # Final check - exit if fzf still not found
+    if ! command -v fzf &>/dev/null; then
+        echo -e "${RED}fzf installation failed or not in PATH. Please install manually.${NC}"
+        return 1
     fi
 
     sudo -v || { echo -e "${RED}Sudo authentication failed.${NC}"; return 1; }
@@ -613,10 +632,13 @@ uu() {
     count=$(echo "$SELECTED" | wc -l)
     echo -e "\n${YLW}⚠️ You have selected ${BOLD}$count${NC} ${YLW}apps to uninstall:${NC}"
     echo -e "${CYN}┌──────────────────────────────────────────┐${NC}"
-    echo "$SELECTED" | awk -F ' \\| ' '{printf "│ • %-38s │\n", $2}'
+    echo "$SELECTED" | awk -F ' \| ' '{printf "│ • %-38s │\n", $2}'
     echo -e "${CYN}└──────────────────────────────────────────┘${NC}"
 
-    read -r -p "Are you sure you want to proceed? (y/N): " confirm
+    # ZSH FIX: Separate prompt and read (read -p doesn't work in zsh)
+    echo -n "Are you sure you want to proceed? (y/N): "
+    local confirm
+    read -r confirm
     [[ ! "$confirm" =~ ^[Yy]$ ]] && { echo -e "${RED}Aborted.${NC}"; return; }
     sudo -v || { echo -e "${RED}Sudo authentication failed.${NC}"; return; }
 
@@ -628,9 +650,9 @@ uu() {
 
     while IFS= read -r line; do
         [[ -z "$line" ]] && continue
-        local pkg_display=$(echo "$line" | awk -F ' \\| ' '{print $2}' | xargs)
-        local src_type=$(echo "$line" | awk -F ' \\| ' '{print $3}' | xargs)
-        local orig_id=$(echo "$line" | awk -F ' \\| ' '{print $7}' | xargs)
+        local pkg_display=$(echo "$line" | awk -F ' \| ' '{print $2}' | xargs)
+        local src_type=$(echo "$line" | awk -F ' \| ' '{print $3}' | xargs)
+        local orig_id=$(echo "$line" | awk -F ' \| ' '{print $7}' | xargs)
 
         [[ -z "$src_type" || -z "$orig_id" ]] && continue
 
@@ -640,7 +662,8 @@ uu() {
             case "$src_type" in
                 snap)
                     sudo snap remove "$orig_id" &>/dev/null || exit_code=1
-                    local snap_name=$(basename "$orig_id")
+                    # ZSH FIX: Use ${var:t} instead of basename
+                    local snap_name="${orig_id:t}"
                     rm -rf ~/snap/"$snap_name" 2>/dev/null
                     ;;
                 flatpak)
@@ -654,7 +677,8 @@ uu() {
                     else
                         exit_code=1
                     fi
-                    local appimage_name=$(basename "$orig_id" .AppImage 2>/dev/null)
+                    # ZSH FIX: Use ${var:t:r} instead of basename + .AppImage removal
+                    local appimage_name="${orig_id:t:r}"
                     [[ -n "$appimage_name" ]] && {
                         rm -f ~/.local/share/applications/appimagekit_*"${appimage_name}"*.desktop 2>/dev/null
                         rm -f ~/.local/share/applications/"${appimage_name}".desktop 2>/dev/null
@@ -721,7 +745,12 @@ uu() {
         fi
     done <<< "$SELECTED"
 
-    set "$OLD_SET"
+    # ZSH FIX: Restore job control properly
+    if [[ "$OLD_SET" == "-m" ]]; then
+        set -m
+    else
+        set +m
+    fi
 
     [[ -n "$failed_apps" ]] && echo -e "\n${RED}Failed: ${failed_apps%, }${NC}"
 
