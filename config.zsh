@@ -14,7 +14,7 @@ setopt PROMPT_SUBST
 
 
 # ======================================================
-# 🎨 RAINBOW COLOR & EMOJI SETUP
+# 🎨 RAINBOW COLOR & EMOJI SETUP (zsh compatible)
 # ======================================================
 
 rainbow_colors=(31 32 33 34 35 36 91 92 93 94 95 96)
@@ -70,16 +70,15 @@ cpu_temp() {
   local temp=$(sensors | grep -iE 'Package id 0|Core 0|temp1' | head -n1 | grep -oP '\+\K[0-9.]+' | head -n1 | cut -d. -f1)
   if [[ -n "$temp" ]]; then
     if [ "$temp" -gt 70 ]; then
-      echo -e " \e[91m🌡️ ${temp}°C\e[0m" # ৭০ এর উপরে হলে লাল
+      echo -e " \e[91m🌡️ ${temp}°C\e[0m"
     elif [ "$temp" -gt 55 ]; then
-      echo -e " \e[93m🌡️ ${temp}°C\e[0m" # ৫৫ এর উপরে হলে হলুদ
+      echo -e " \e[93m🌡️ ${temp}°C\e[0m"
     else
-      echo -e " \e[92m🌡️ ${temp}°C\e[0m" # স্বাভাবিক হলে সবুজ
+      echo -e " \e[92m🌡️ ${temp}°C\e[0m"
     fi
   fi
 }
 
-# 📁 FOLDER SIZE
 folder_size() {
   local size=$(du -sh . 2>/dev/null | cut -f1)
   echo "📂 ${size}"
@@ -93,9 +92,6 @@ load_avg() {
   echo " ⚖️ $(uptime | awk -F'load average:' '{ print $2 }' | cut -d',' -f1 | sed 's/ //g')"
 }
 
-
-
-# এটি কাজ করার জন্য আপনার .bashrc এর একদম শুরুতে এই ২ লাইন থাকতে হবে:
 preexec() { timer=${timer:-$SECONDS}; }
 
 get_duration() {
@@ -112,46 +108,36 @@ check_readonly() {
 
 pending_updates() {
   local updates=0
-
-  # ১. আর্চ লিনাক্স (Arch Linux) এর জন্য চেক
   if command -v checkupdates >/dev/null 2>&1; then
     updates=$(checkupdates 2>/dev/null | wc -l)
-
-  # ২. ডেবিয়ান/উবুন্টু/ডিপিন (Deepin) এর জন্য চেক
   elif [ -f /var/lib/update-notifier/updates-available ]; then
     updates=$(cat /var/lib/update-notifier/updates-available | grep -Po '^[0-9]+(?= updates? can be installed)' | head -n1)
-
-  # ৩. অল্টারনেটিভ ডেবিয়ান পদ্ধতি (যদি ফাইল না থাকে)
   elif command -v apt-get >/dev/null 2>&1; then
-    # এটি কিছুটা স্লো হতে পারে, তাই সাইলেন্টলি চেক করবে
     updates=$(apt-get -s upgrade 2>/dev/null | grep -iP '^[0-9]+ upgraded' | cut -d' ' -f1)
   fi
-
-  # যদি আপডেট ১ এর বেশি হয় তবেই দেখাবে
   if [[ -n "$updates" && "$updates" -gt 0 ]]; then
     echo " 🆙 $updates"
   fi
 }
 
-blink_cursor="%{\e[5m%}❯❯❯%{\e[25m%}"
-
 # ======================================================
-# 🎯 TWO LINE PROMPT - SIZE ON FIRST LINE
+# 🎯 zsh PROMPT
 # ======================================================
 
-# # LINE 1: Emoji + Folder + Size + Git
-# PS1="\$(rand_emoji) %{\033[\$(rand_color)m%}%1~%{\033[0m%} "
-# PS1+="\$(folder_size) [🌿 \$(parse_git_branch)]\$(cpu_temp) \$(disk_usage) \$(load_avg) \$(get_duration) \$(check_readonly) \$(pending_updates)\n"
+# zsh-এ %F{color} ... %f ব্যবহার করা সবচেয়ে নিরাপদ
+# অথবা $'\e[33m' ব্যবহার করুন
 
-# # LINE 2: Node | NPM | Bun | Date | Sys | Battery + Cursor
-# PS1+="\$(node_version) │ \$(npm_version) │ \$(bun_version) │ \$(kernel_version) │ "
-# PS1+="\$(time_date) │ \$(sys_info) │ \$(battery_info)\n"
+# Option 1: %F/%f ব্যবহার করে (সবচেয়ে নিরাপদ)
+# PS1='$(rand_emoji) %F{$(rand_color)}%1~%f '
+# PS1+='$(folder_size) [🌿 $(parse_git_branch)]$(cpu_temp) $(disk_usage) $(load_avg) $(get_duration) $(check_readonly) $(pending_updates)'$'\n'
+# PS1+='$(node_version) │ $(npm_version) │ $(bun_version) │ $(kernel_version) │ '
+# PS1+='$(time_date) │ $(sys_info) │ $(battery_info)'$'\n'
 
-PS1="\$(rand_emoji) %{\033[\$(rand_color)m%}%1~%{\033[0m%} \n"
+# Option 2: $'\e[33m' ব্যবহার করে (আপনার স্টাইল)
+blink_cursor=$'%{\e[5m%}❯❯❯%{\e[25m%}'
 
+PS1='$(rand_emoji) %{$'\e'[$(( $(rand_color) ))m%}%1~%{$'\e'[0m%} '$'\n'
 PS1+="${blink_cursor} "
-
-
 
 
 # ======================================================
