@@ -161,101 +161,63 @@ add-zsh-hook precmd build_prompt
 # ======================================================
 
 # --- Initialize a Project (Bun or NPM) ---
-init() {
-  # Detect available package managers
+in() {
   local has_bun=0 has_npm=0
   command -v bun >/dev/null 2>&1 && has_bun=1
   command -v npm >/dev/null 2>&1 && has_npm=1
 
   echo "🚀 Select Package Manager:"
+  [[ $has_bun -eq 1 ]] && echo "1) 🥐 Bun (Fast)" || echo "1) 🥐 Bun (Not installed)"
+  [[ $has_npm -eq 1 ]] && echo "2) 📦 NPM (Standard)" || echo "2) 📦 NPM (Not installed)"
 
-  if [[ $has_bun -eq 1 ]]; then
-    echo "1) 🥐 Bun (Fast)"
-  else
-    echo "1) 🥐 Bun (Not installed)"
-  fi
-
-  if [[ $has_npm -eq 1 ]]; then
-    echo "2) 📦 NPM (Standard)"
-  else
-    echo "2) 📦 NPM (Not installed)"
-  fi
-
-  # Zsh compatible read
+  # ✅ Zsh compatible
   read "choice?Enter choice [1/2]: "
 
   case "$choice" in
     1)
-      if [[ $has_bun -eq 0 ]]; then
-        echo "❌ Bun is not installed. Install from https://bun.sh"
-        return 1
-      fi
+      [[ $has_bun -eq 0 ]] && { echo "❌ Bun not installed."; return 1; }
       bun init -y
       ;;
     2)
-      if [[ $has_npm -eq 0 ]]; then
-        echo "❌ NPM is not installed."
-        return 1
-      fi
+      [[ $has_npm -eq 0 ]] && { echo "❌ NPM not installed."; return 1; }
       npm init -y
       ;;
-    *)
-      echo "❌ Cancelled."
-      return 1
-      ;;
+    *) echo "❌ Cancelled."; return 1 ;;
   esac
 
-  # Create comprehensive .gitignore if missing
   if [ ! -f .gitignore ]; then
     cat > .gitignore << 'GITIGNORE'
-# Dependencies
 node_modules/
 .pnp
 .pnp.js
-
-# Package managers
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
 bun.lockb
-
-# Build outputs
 dist/
 build/
 .out/
 .next/
-
-# Environment
 .env
 .env.local
 .env.*.local
-
-# Logs
 logs/
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# OS files
 .DS_Store
-Thumbs.db
-
-# Editor directories and files
 .idea/
 .vscode/
 *.swp
-*.swo
 *~
 GITIGNORE
-    echo "✅ .gitignore created with common patterns."
+    echo "✅ .gitignore created."
   else
-    echo "ℹ️  .gitignore already exists, skipped."
+    echo "ℹ️  .gitignore already exists."
   fi
 
   echo "✅ Project initialized!"
 }
+
 
 # --- Setup Next.js Project ---
 function next() {
