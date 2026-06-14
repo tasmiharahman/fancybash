@@ -132,6 +132,8 @@ pending_updates() {
 # 🎯 zsh PROMPT (With Your Original Comments & Absolute Fix)
 # ======================================================
 
+
+# ডাইনামিক প্রোম্পট ইভালুয়েশন অন করা
 setopt prompt_subst
 
 build_prompt() {
@@ -147,11 +149,12 @@ build_prompt() {
 
   # তৃতীয় লাইন: ব্লিন্কিং কার্সার
 
-  PROMPT=$'%{\e[5m%}❯❯❯%{\e[25m%} '
+  PROMPT+=$'%{\e[5m%}❯❯❯%{\e[25m%} '
 }
 
 # প্রতিবার প্রম্পট রিলোডের জন্য হুক অ্যাসাইন
 add-zsh-hook precmd build_prompt
+
 
 # ======================================================
 #  ⚡ INTERACTIVE SETUP SCRIPTS
@@ -398,9 +401,11 @@ gwip() {
     # ১. সব ফাইল স্টেজ করা
     git add .
 
-    # ২. ইউজার থেকে মেসেজ নেওয়া
+    # ২. ইউজার থেকে মেসেজ নেওয়া
     echo -e "\033[1;36m🚀 Git Quick Push Mode\033[0m"
-    read -p "📝 Enter commit message [Enter for default]: " msg
+
+    # Zsh-এর জন্য সঠিক read syntax (variable?prompt_text)
+    read "msg?📝 Enter commit message [Enter for default]: "
 
     # ৩. মেসেজ সেট করা (খালি থাকলে ডিফল্ট নিবে)
     local final_msg="${msg:-Work in progress (Save Point)}"
@@ -3326,6 +3331,14 @@ compinit
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# Command history settings
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+
+# Share history between multiple terminals
+setopt share_history
+setopt append_history
 
 # =====================================================
 # End of .bashrc
