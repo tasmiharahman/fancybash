@@ -162,34 +162,110 @@ add-zsh-hook precmd build_prompt
 
 # --- Initialize a Project (Bun or NPM) ---
 init() {
+  # Detect available package managers
+  local has_bun=0 has_npm=0
+  command -v bun >/dev/null 2>&1 && has_bun=1
+  command -v npm >/dev/null 2>&1 && has_npm=1
+
   echo "🚀 Select Package Manager:"
-  echo "1) 🥐 Bun (Fast)"
-  echo "2) 📦 NPM (Standard)"
-  read -p "Enter choice [1/2]: " choice
+
+  if [[ $has_bun -eq 1 ]]; then
+    echo "1) 🥐 Bun (Fast)"
+  else
+    echo "1) 🥐 Bun (Not installed)"
+  fi
+
+  if [[ $has_npm -eq 1 ]]; then
+    echo "2) 📦 NPM (Standard)"
+  else
+    echo "2) 📦 NPM (Not installed)"
+  fi
+
+  # Zsh compatible read
+  read "choice?Enter choice [1/2]: "
 
   case "$choice" in
-    1) command -v bun >/dev/null && bun init -y || echo "❌ Bun not found!" ;;
-    2) npm init -y ;;
-    *) echo "❌ Cancelled."; return 1 ;;
+    1)
+      if [[ $has_bun -eq 0 ]]; then
+        echo "❌ Bun is not installed. Install from https://bun.sh"
+        return 1
+      fi
+      bun init -y
+      ;;
+    2)
+      if [[ $has_npm -eq 0 ]]; then
+        echo "❌ NPM is not installed."
+        return 1
+      fi
+      npm init -y
+      ;;
+    *)
+      echo "❌ Cancelled."
+      return 1
+      ;;
   esac
 
-  # Create .gitignore if missing
+  # Create comprehensive .gitignore if missing
   if [ ! -f .gitignore ]; then
-    echo "node_modules/" > .gitignore
-    echo "✅ .gitignore created."
+    cat > .gitignore << 'GITIGNORE'
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+# Build outputs
+dist/
+build/
+.out/
+.next/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+GITIGNORE
+    echo "✅ .gitignore created with common patterns."
+  else
+    echo "ℹ️  .gitignore already exists, skipped."
   fi
+
   echo "✅ Project initialized!"
 }
 
 # --- Setup Next.js Project ---
-next() {
+function next() {
   echo "⚡ Setup Next.js with:"
   echo "1) Bun"
   echo "2) NPM"
-  read -p "Choice: " c
+  vared -p "Choice: " -c c
   case "$c" in
     1) bunx create-next-app@latest . ;;
-    2) npx  create-next-app@latest . ;;
+    2) npx create-next-app@latest . ;;
     *) echo "Invalid choice" ;;
   esac
 }
@@ -245,9 +321,9 @@ vite() {
   echo "⚡ Setup Vite with:"
   echo "1) Bun"
   echo "2) NPM"
-  read -p "Choice: " c
+  read "c?Choice: "
 
-  read -p "Add Tailwind CSS v4? (y/n): " tw
+  read "tw?Add Tailwind CSS v4? (y/n): "
 
   case "$c" in
     1)
@@ -255,7 +331,7 @@ vite() {
       if [[ "$tw" == "y" ]]; then
         if ! bun add tailwindcss @tailwindcss/vite; then
           echo "❌ Install failed with Bun."
-          read -p "Try with --force? (y/n): " force
+          read "force?Try with --force? (y/n): "
           [[ "$force" == "y" ]] && bun add tailwindcss @tailwindcss/vite --force
         fi
       fi
@@ -265,7 +341,7 @@ vite() {
       if [[ "$tw" == "y" ]]; then
         if ! npm install tailwindcss @tailwindcss/vite; then
           echo "❌ Install failed with NPM (Peer Dependency Conflict likely)."
-          read -p "Try with --legacy-peer-deps? (y/n): " legacy
+          read "legacy?Try with --legacy-peer-deps? (y/n): "
           [[ "$legacy" == "y" ]] && npm install tailwindcss @tailwindcss/vite --legacy-peer-deps
         fi
       fi
@@ -274,27 +350,40 @@ vite() {
   esac
 
   if [[ "$tw" == "y" ]]; then
-    # Create src folder and CSS file setup
     mkdir -p src
     CSS_FILE="src/index.css"
     [ -f "src/style.css" ] && CSS_FILE="src/style.css"
 
-    # Add the Tailwind v4 import
     echo '@import "tailwindcss";' > "$CSS_FILE"
+
+    # Auto-detect Vite config file
+    VITE_CONFIG=""
+    for f in "vite.config.ts" "vite.config.js" "vite.config.mjs"; do
+      [ -f "$f" ] && VITE_CONFIG="$f" && break
+    done
 
     echo "---------------------------------------------------"
     echo "✅ Tailwind CSS v4 packages installed!"
     echo "✅ Added '@import \"tailwindcss\";' to $CSS_FILE"
     echo ""
-    echo "⚠️  ACTION REQUIRED: You must update your Vite config manually."
-    echo ""
-    echo "Open your vite.config.ts (or .js) and add these two lines:"
-    echo "  1. import tailwindcss from '@tailwindcss/vite'"
-    echo "  2. Add tailwindcss() to the plugins array."
+
+    if [[ -n "$VITE_CONFIG" ]]; then
+      echo "⚠️  ACTION REQUIRED: Update $VITE_CONFIG"
+      echo ""
+      echo "Add these lines:"
+      echo "  import tailwindcss from '@tailwindcss/vite'"
+      echo "  plugins: [tailwindcss(), ...]"
+      echo ""
+      echo "Or run this command to auto-patch:"
+      echo "  sed -i '1i import tailwindcss from \"@tailwindcss/vite\";' $VITE_CONFIG && sed -i 's/plugins: \\[/plugins: [tailwindcss(), /' $VITE_CONFIG"
+    else
+      echo "⚠️  No vite.config found. Create one and add:"
+      echo "  import tailwindcss from '@tailwindcss/vite'"
+      echo "  plugins: [tailwindcss()]"
+    fi
     echo "---------------------------------------------------"
   fi
 }
-
 
 
 
@@ -3258,7 +3347,7 @@ alias fu='cd ~/Developer/fullstack'
 # --- System Maintenance ---
 alias update='sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt-get install -f && flatpak update -y'
 alias clean='sudo apt-get autoremove --purge -y && sudo apt-get autoclean && sudo apt-get clean -y && flatpak uninstall --unused -y && flatpak repair'
-alias bashrc='code ~/.bashrc'
+alias zshrc='code ~/.zshrc'
 alias to='code .'
 alias rel='source ~/.zshrc && echo "✅ .zshrc reloaded successfully!"'
 
