@@ -53,37 +53,7 @@ function ... { Set-Location ..\.. }
 function .... { Set-Location ..\..\.. }
 function dev { Set-Location "$HOME\Development" -ErrorAction SilentlyContinue }
 
-# ------------------------------------------------------------------------------
-# 📦 PACKAGE MANAGERS
-# ------------------------------------------------------------------------------
-# NPM
-function ni { npm install }
-function nid { npm install -D }
-function nr { npm run $args[0] }
-function nrd { npm run dev }
-function nrb { npm run build }
-function nrs { npm run start }
 
-# Bun
-function bi { bun install }
-function br { bun run $args[0] }
-function brd { bun run dev }
-function brb { bun run build }
-function brs { bun run start }
-
-# ------------------------------------------------------------------------------
-# 🌿 GIT VERSION CONTROL
-# ------------------------------------------------------------------------------
-function gi { git init }
-function gs { git status -s }
-function ga { git add . }
-function gcm { git commit -m $args[0] }
-function gps { git push }
-function gpl { git pull }
-function gl { git log --graph --oneline --all }
-function gco { git checkout $args[0] }
-function gcb { git checkout -b $args[0] }
-function gd { git diff }
 
 function gwip {
     $msg = $args[0]
