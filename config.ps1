@@ -232,3 +232,72 @@ function keep {
 Set-Alias -Name c -Value Clear-Host
 Set-Alias -Name cls -Value Clear-Host
 Set-Alias -Name h -Value Get-History
+
+
+# Remove default cd alias to use custom function
+if (Test-Path alias:cd) { Remove-Item alias:cd }
+
+# Global variable for previous directory
+$global:OLDPWD = $HOME
+
+function cd {
+    param([string]$path = $HOME)
+
+    # cd - : previous directory toggle (like bash)
+    if ($path -eq '-') {
+        if ($global:OLDPWD -and (Test-Path $global:OLDPWD)) {
+            $tmp = $PWD.Path
+            Set-Location $global:OLDPWD
+            $global:OLDPWD = $tmp
+            return
+        } else {
+            Write-Host "❌ No previous directory found." -ForegroundColor Red
+            return
+        }
+    }
+
+    # Save current before moving
+    $global:OLDPWD = $PWD.Path
+
+    # Auto-cd: if no path given, go home
+    if (-not $path) {
+        Set-Location $HOME
+        return
+    }
+
+    # Smart path resolution
+    $target = $path
+
+    # If path doesn't exist, try fuzzy matching
+    if (-not (Test-Path $target)) {
+        # Try exact match first
+        $exact = Get-ChildItem -Directory -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name -eq $target } | Select-Object -First 1
+
+        if ($exact) {
+            $target = $exact.FullName
+        } else {
+            # Try wildcard/fuzzy match
+            $fuzzy = Get-ChildItem -Directory -ErrorAction SilentlyContinue |
+                Where-Object { $_.Name -like "*$target*" } | Select-Object -First 1
+
+            if ($fuzzy) {
+                $target = $fuzzy.FullName
+                Write-Host "🔍 Fuzzy match: $($fuzzy.Name)" -ForegroundColor Yellow
+            }
+        }
+    }
+
+    # Final navigation
+    if (Test-Path $target -PathType Container) {
+        Set-Location $target
+    } else {
+        Write-Host "❌ cd: no such directory: $path" -ForegroundColor Red
+    }
+}
+
+# Auto-cd: If you type just a directory name without any command, auto-navigate
+# This requires PSReadLine Option
+if (Get-Module PSReadLine -ErrorAction SilentlyContinue) {
+    Set-PSReadLineOption -ExtraPromptLineCount 1
+}
