@@ -8,15 +8,16 @@
 #   Verified: 2026 - Cross-platform compatibility
 # ==============================================================================
 
+
+setopt PROMPT_SUBST
+
+
+
 plugins=(
   git
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
-
-
-
-setopt PROMPT_SUBST
 
 
 # ======================================================
