@@ -8,16 +8,13 @@
 #   Verified: 2026 - Cross-platform compatibility
 # ==============================================================================
 
-
-setopt PROMPT_SUBST
-
-
-
 plugins=(
   git
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
+
+setopt PROMPT_SUBST
 
 
 # ======================================================
@@ -1470,7 +1467,7 @@ v() {
 
     [ -z "$RAW_LIST" ] && echo "❌ No videos found" && return 1
 
-    # 🎨 UI Header setup (Idx, Folder, Name)
+    # 🎨 UI Header
     local HEADER_STR=$(printf "\e[1;34m%-5s \e[1;33m%-20s \e[1;35m%-s\e[0m" "IDX" "FOLDER" "VIDEO NAME")
 
     local SELECTED_LINE
@@ -1478,15 +1475,9 @@ v() {
         idx = NR;
         folder = $(NF-1);
         filename = $NF;
-
-        # 📂 ফোল্ডার আইকন যোগ করা
         folder_with_icon = "📁 " folder;
-
-        # ✂️ Filename truncation (Limit: 55)
         if (length(filename) > 55) filename = substr(filename, 1, 52) "...";
-        # ✂️ Folder truncation (Limit: 17 for icon + name)
         if (length(folder_with_icon) > 17) folder_with_icon = substr(folder_with_icon, 1, 14) "...";
-
         printf "\033[34m%-5s \033[33m%-20s \033[0m%s\n", idx, folder_with_icon, filename
     }' | fzf \
         --ansi \
@@ -1499,19 +1490,29 @@ v() {
         --pointer="▶" \
         --color="bg+:-1,fg+:white,hl:yellow,hl+:cyan,header:blue,prompt:cyan,pointer:green")
 
-    # ▶ Play Logic
     if [ -n "$SELECTED_LINE" ]; then
-        # প্রথম কলাম থেকে ইনডেক্স বের করা
-        local INDEX=$(echo "$SELECTED_LINE" | awk '{print $1}')
+        local INDEX=$(echo "$SELECTED_LINE" | sed 's/\x1b\[[0-9;]*m//g' | awk '{print $1}')
+
+        if ! [[ "$INDEX" =~ ^[0-9]+$ ]]; then
+            echo "❌ Invalid selection"
+            return 1
+        fi
+
         local FULL_PATH=$(echo "$RAW_LIST" | sed -n "${INDEX}p")
 
+        if [ -z "$FULL_PATH" ] || [ ! -f "$FULL_PATH" ]; then
+            echo "❌ Video file not found"
+            return 1
+        fi
+
         echo -e "\e[1;92m▶ Playing:\e[0m $(basename "$FULL_PATH")"
-        $PLAYER "$FULL_PATH" >/dev/null 2>&1 & disown
+
+        # ✅ Zsh-এর পারফেক্ট ডিটাচড মেথড (&!)
+        ${=PLAYER} "$FULL_PATH" >/dev/null 2>&1 &!
     else
         echo "👋 Exit"
     fi
 }
-
 
 # ======================================================
 #  📦universal clean
