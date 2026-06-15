@@ -356,6 +356,7 @@ vite() {
 
 
 css() {
+  # Check package.json
   if [[ ! -f package.json ]]; then
     echo "❌ Error: package.json not found!"
     return 1
@@ -365,15 +366,85 @@ css() {
   local pm="npm"
   [[ -f bun.lockb ]] && pm="bun"
 
-  echo "📦 Installing Tailwind via $pm..."
+  # Detect project type
+  local has_vite=0 has_next=0 has_postcss=0
+  [[ -f vite.config.ts || -f vite.config.js ]] && has_vite=1
+  [[ -f next.config.ts || -f next.config.js || -f next.config.mjs ]] && has_next=1
+  [[ -f postcss.config.js || -f postcss.config.mjs ]] && has_postcss=1
+
+  echo "📦 Installing Tailwind CSS v4 via $pm..."
+
   if [[ "$pm" == "bun" ]]; then
-      bun add -D tailwindcss clsx tailwind-merge
-      bunx tailwindcss init -p
+    if [[ $has_vite -eq 1 ]]; then
+      bun add -D tailwindcss @tailwindcss/vite
+    else
+      bun add -D tailwindcss @tailwindcss/postcss postcss
+    fi
+    bun add -D clsx tailwind-merge
   else
-      npm install -D tailwindcss clsx tailwind-merge
-      npx tailwindcss init -p
+    if [[ $has_vite -eq 1 ]]; then
+      npm install -D tailwindcss @tailwindcss/vite
+    else
+      npm install -D tailwindcss @tailwindcss/postcss postcss
+    fi
+    npm install -D clsx tailwind-merge
   fi
-  echo "✅ Tailwind CSS Ready!"
+
+  # Find main CSS file
+  local css_file=""
+  for f in "src/index.css" "src/style.css" "src/app/globals.css" "app/globals.css" "styles/globals.css" "src/styles.css"; do
+    [[ -f "$f" ]] && css_file="$f" && break
+  done
+
+  # Create or update CSS file
+  if [[ -n "$css_file" ]]; then
+    if ! grep -q '@import "tailwindcss"' "$css_file" 2>/dev/null; then
+      echo '@import "tailwindcss";' | cat - "$css_file" > /tmp/tw_css && mv /tmp/tw_css "$css_file"
+      echo "✅ Added @import to $css_file"
+    fi
+  else
+    mkdir -p src
+    echo '@import "tailwindcss";' > src/index.css
+    echo "✅ Created src/index.css"
+    css_file="src/index.css"
+  fi
+
+  # Vite config patch (if Vite project)
+  if [[ $has_vite -eq 1 ]]; then
+    local vite_config=""
+    for f in "vite.config.ts" "vite.config.js" "vite.config.mjs"; do
+      [[ -f "$f" ]] && vite_config="$f" && break
+    done
+
+    if [[ -n "$vite_config" ]] && ! grep -q "@tailwindcss/vite" "$vite_config" 2>/dev/null; then
+      sed -i '1i import tailwindcss from "@tailwindcss/vite";' "$vite_config"
+      sed -i 's/plugins: \[/plugins: [tailwindcss(), /' "$vite_config"
+      echo "✅ Patched $vite_config"
+    fi
+  fi
+
+  # PostCSS config (if not Vite/Next)
+  if [[ $has_vite -eq 0 && $has_next -eq 0 ]]; then
+    if [[ ! -f postcss.config.js && ! -f postcss.config.mjs ]]; then
+      cat > postcss.config.mjs << 'EOF'
+/** @type {import('postcss-load-config').Config} */
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+EOF
+      echo "✅ Created postcss.config.mjs"
+    fi
+  fi
+
+  echo ""
+  echo "🎉 Tailwind CSS v4 Ready!"
+  echo "   CSS: $css_file"
+  [[ $has_vite -eq 1 ]] && echo "   Plugin: @tailwindcss/vite"
+  [[ $has_vite -eq 0 && $has_next -eq 0 ]] && echo "   Plugin: @tailwindcss/postcss"
 }
 
 
