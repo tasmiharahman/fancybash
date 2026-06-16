@@ -3764,6 +3764,27 @@ SAVEHIST=50000
 # Share history between multiple terminals
 setopt share_history
 setopt append_history
+setopt appendhistory
+setopt sharehistory
+
+# --- Auto Completion ---
+autoload -Uz compinit
+compinit
+
+# --- Deepin System Colors ---
+if [[ ("$TERM" = *256color || "$TERM" = screen* || "$TERM" = xterm* ) && -f /etc/lscolor-256color ]]; then
+    eval $(dircolors -b /etc/lscolor-256color)
+else
+    eval $(dircolors)
+fi
+alias ls='ls --color=auto'
+alias ll='ls -l'
+alias la='ls -A'
+
+# --- Load Bash Aliases if exists ---
+if [ -f ~/.bash_aliases ]; then
+    source ~/.bash_aliases
+fi
 
 # =====================================================
 # End of .bashrc
