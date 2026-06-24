@@ -1103,9 +1103,10 @@ keep() {
     print_category "$ICON_LIGHTNING" "PROJECT INITIALIZATION" "$ORANGE"
     print_cmd "init" "Initialize project (Bun/NPM choice)" "" "$GREEN"
     print_cmd "next" "Setup Next.js project" "" "$CYAN"
-    print_cmd "vite" "Setup Vite project" "" "$PURPLE"
+    print_cmd "ui" "Setup Shadcn UI with components" "ui + select button,card" "$BLUE"
+    print_cmd "vite" "Setup Vite project with Tailwind" "" "$PURPLE"
     print_cmd "css" "Auto-install Tailwind CSS" "" "$BLUE"
-    print_cmd "run" "Bun Run JS & TS File" "" "$YELLOW"
+    print_cmd "run" "Bun Run JS & TS File (Interactive)" "" "$YELLOW"
 
     # ==================== SYSTEM ====================
     print_category "$ICON_GEAR" "SYSTEM & MAINTENANCE" "$BLUE"
@@ -1132,8 +1133,27 @@ keep() {
     print_cmd "gen <len>" "Generate random secret key" "gen 32" "$PURPLE"
     print_cmd "h <word>" "Search command history" "h git" "$BLUE"
     print_cmd "c / cls" "Clear terminal screen" "" "$GRAY"
-    print_cmd "v" " video play for Terminal" "" "$PINK"
+    print_cmd "v" "Interactive video player for directory" "" "$PINK"
     print_cmd "pg" "Generate package.json for current project" "" "$PURPLE"
+
+    # ==================== ADVANCED INTERACTIVE TOOLS ====================
+    print_category "$ICON_LIGHTNING" "ADVANCED INTERACTIVE TOOLS" "$PURPLE"
+    print_cmd "cf" "Fuzzy find & navigate directories" "" "$CYAN"
+    print_cmd "   ↳ ENTER" "cd to selected folder" "" "$GREEN"
+    print_cmd "   ↳ CTRL+O" "Open in VS Code/Cursor/Nvim" "" "$BLUE"
+    print_cmd "   ↳ CTRL+Y" "Copy path to clipboard" "" "$YELLOW"
+    print_cmd "   ↳ CTRL+H" "Navigate to parent directory" "" "$PURPLE"
+    print_cmd "mkd <name>" "Create & enter new directory" "mkd my-project" "$GREEN"
+    print_cmd "rmd <name>" "Force remove directory" "rmd old-folder" "$RED"
+    print_cmd "rmf <file>" "Safe remove single file" "rmf file.txt" "$ORANGE"
+    print_cmd "bak <file>" "Create backup of file" "bak config.js" "$BLUE"
+    print_cmd "trash <file>" "Move file to system trash" "trash junk.txt" "$YELLOW"
+
+    # ==================== FILE MANAGEMENT ====================
+    print_category "$ICON_FILE" "FOLDER UTILITIES" "$BLUE"
+    print_cmd "mkd / rmd / rmf" "Create/Remove directories/files" "" "$YELLOW"
+    print_cmd "bak / trash" "Backup or trash files safely" "" "$ORANGE"
+    print_cmd "cd <folder>" "Smart cd with auto-list files" "" "$CYAN"
 
     # ==================== FOOTER ====================
     echo -e "\n  ${PURPLE}┌─────────────────────────────────────────────────────────────────────┐${RESET}"
