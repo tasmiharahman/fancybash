@@ -184,16 +184,108 @@ function trash {
 }
 
 function keep {
-    Write-Host "======================================" -ForegroundColor Cyan
-    Write-Host "     POWERSHELL FANCYBASH MENU        " -ForegroundColor Cyan
-    Write-Host "======================================" -ForegroundColor Cyan
-    Write-Host " Navigation: .., ..., ...., dev"
-    Write-Host " NPM:        ni, nid, nr, nrd, nrb, nrs"
-    Write-Host " Bun:        bi, br, brd, brb, brs"
-    Write-Host " Git:        gi, gs, ga, gcm, gps, gpl, gl, gco, gcb, gd, gwip"
-    Write-Host " Setup:      init, next, vite, ui, pg"
-    Write-Host " Utilities:  mkd, rmd, rmf, kp, ff, gen, bak, ex, trash"
-    Write-Host "======================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "╔════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+    Write-Host "║  🚀  MASTER COMMAND CENTER           Developer Rihad's Ultimate PowerShell║" -ForegroundColor Cyan
+    Write-Host "╚════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host "  v2.0 • Modern Terminal UX • $(Get-Date -Format 'MMMM dd, yyyy')" -ForegroundColor Gray
+    Write-Host ""
+
+    function PrintCategory {
+        param([string]$Icon, [string]$Title, [string]$Color)
+        Write-Host "  ┌─────────────────────────────────────────────────────────────────────┐" -ForegroundColor $Color
+        Write-Host "  │ $Icon  $Title" -ForegroundColor $Color -NoNewline
+        Write-Host "                                    " -ForegroundColor $Color -NoNewline
+        Write-Host "│" -ForegroundColor $Color
+        Write-Host "  └─────────────────────────────────────────────────────────────────────┘" -ForegroundColor $Color
+    }
+
+    function PrintCmd {
+        param([string]$Cmd, [string]$Desc, [string]$Example = "", [string]$Color = "White")
+        if ([string]::IsNullOrEmpty($Example)) {
+            Write-Host ("     " + $Cmd.PadRight(15) + " │ " + $Desc) -ForegroundColor $Color
+        } else {
+            Write-Host ("     " + $Cmd.PadRight(15) + " │ " + $Desc.PadRight(35) + " " + $Example) -ForegroundColor $Color
+        }
+    }
+
+    # NAVIGATION
+    PrintCategory "📂" "NAVIGATION & MOVEMENT" "Cyan"
+    PrintCmd ".." "Parent directory" "" "Yellow"
+    PrintCmd "..." "Two levels up" "" "Yellow"
+    PrintCmd "...." "Three levels up" "" "Yellow"
+    PrintCmd "dev" "Go to ~/Development" "" "Green"
+    Write-Host ""
+
+    # NPM
+    PrintCategory "📦" "NPM COMMANDS" "Green"
+    PrintCmd "ni" "npm install" "" "Green"
+    PrintCmd "nid" "npm install -D" "" "Green"
+    PrintCmd "nr" "npm run" "" "Green"
+    PrintCmd "nrd" "npm run dev" "" "Yellow"
+    PrintCmd "nrb" "npm run build" "" "Yellow"
+    PrintCmd "nrs" "npm run start" "" "Yellow"
+    Write-Host ""
+
+    # BUN
+    PrintCategory "🥐" "BUN COMMANDS (Ultra Fast)" "Yellow"
+    PrintCmd "bi" "bun install" "" "Yellow"
+    PrintCmd "br" "bun run" "" "Yellow"
+    PrintCmd "brd" "bun run dev" "" "Green"
+    PrintCmd "brb" "bun run build" "" "Green"
+    PrintCmd "brs" "bun run start" "" "Green"
+    Write-Host ""
+
+    # GIT
+    PrintCategory "🌿" "GIT VERSION CONTROL" "Magenta"
+    PrintCmd "gi" "Initialize new repository" "" "Green"
+    PrintCmd "gs" "Check status (short format)" "" "Blue"
+    PrintCmd "ga" "Stage all files" "" "Yellow"
+    PrintCmd "gcm <msg>" "Commit with message" "gcm 'feat: add login'" "Green"
+    PrintCmd "gps / gpl" "Push / Pull from remote" "" "Magenta"
+    PrintCmd "gl" "View git log" "" "Cyan"
+    PrintCmd "gco <branch>" "Checkout branch" "gco main" "Yellow"
+    PrintCmd "gcb <name>" "Create & checkout branch" "gcb feature-x" "Green"
+    PrintCmd "gd" "View diff" "" "DarkYellow"
+    PrintCmd "gst / gsta" "Stash / Apply" "" "Blue"
+    PrintCmd "gwip" "Quick WIP commit + push" "" "Magenta"
+    Write-Host ""
+
+    # PROJECT SETUP
+    PrintCategory "⚡" "PROJECT INITIALIZATION" "DarkYellow"
+    PrintCmd "init" "Initialize project (Bun/NPM)" "" "Green"
+    PrintCmd "next" "Setup Next.js project" "" "Cyan"
+    PrintCmd "ui" "Setup Shadcn UI with components" "ui + select button,card" "Blue"
+    PrintCmd "vite" "Setup Vite with Tailwind" "" "Magenta"
+    PrintCmd "css" "Auto-install Tailwind CSS" "" "Blue"
+    Write-Host ""
+
+    # UTILITIES
+    PrintCategory "💻" "UTILITY TOOLS" "Cyan"
+    PrintCmd "ex <file>" "Extract any archive" "ex file.zip" "Green"
+    PrintCmd "ff <name>" "Find file (fast search)" "ff config" "Yellow"
+    PrintCmd "gen <len>" "Generate random secret" "gen 32" "Magenta"
+    PrintCmd "h <word>" "Search command history" "h git" "Blue"
+    PrintCmd "c / cls" "Clear terminal screen" "" "Gray"
+    Write-Host ""
+
+    # FILE MANAGEMENT
+    PrintCategory "📁" "FILE MANAGEMENT" "Blue"
+    PrintCmd "mkd <name>" "Create & enter directory" "mkd my-project" "Green"
+    PrintCmd "rmd <name>" "Force remove directory" "rmd old-folder" "Red"
+    PrintCmd "rmf <file>" "Safe remove single file" "rmf file.txt" "DarkYellow"
+    PrintCmd "bak <file>" "Create backup of file" "bak config.js" "Blue"
+    PrintCmd "trash <file>" "Move file to trash" "trash junk.txt" "Yellow"
+    Write-Host ""
+
+    # FOOTER
+    Write-Host "  ┌─────────────────────────────────────────────────────────────────────┐" -ForegroundColor Magenta
+    Write-Host "  │ ✨ PRO TIPS:                                                        │" -ForegroundColor Magenta
+    Write-Host "  │   • Use Tab for command auto-completion                             │" -ForegroundColor Magenta
+    Write-Host "  │   • Prompt shows: Git branch │ Folder name │ Emoji                  │" -ForegroundColor Magenta
+    Write-Host "  │   • Type function names directly to execute                         │" -ForegroundColor Magenta
+    Write-Host "  └─────────────────────────────────────────────────────────────────────┘" -ForegroundColor Magenta
+    Write-Host ""
 }
 
 # ------------------------------------------------------------------------------
