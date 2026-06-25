@@ -765,30 +765,48 @@ uu() {
     echo -e "${CYN}🔍 Harvesting System Assets...${NC}"
 
     shred_animation() {
-        local PID=$1; local pkg=$2; local sp='/-\|'
-        local i=0
-        local exit_status=0
+        local PID=$1 pkg=$2
+        local i=0 exit_status=0
+
+        # ZSH FIX: inner functions don't inherit outer local variables —
+        # define colors locally so printf format works correctly
+        local _R="\033[1;31m" _G="\033[1;32m" _C="\033[1;36m" _B="\033[1m" _N="\033[0m"
+
+        # ZSH FIX: use array for spinner so indexing is unambiguous
+        local -a sp=('/' '-' '\' '|')
+        local BAR_WIDTH=20
+
         tput civis 2>/dev/null || true
 
         while kill -0 "$PID" 2>/dev/null; do
-            local filled=$((i % 21))
-            local empty=$((20 - filled))
-            local bar=""
-            local j
-            for ((j=0; j<filled; j++)); do bar+="█"; done
-            local e_bar=""
-            for ((j=0; j<empty; j++)); do e_bar+="▒"; done
-            local spinner_char="${sp[$((i % 4 + 1))]}"
-            printf "\r${CYN}⚡ Processing ${BOLD}%s${NC}: ${RED}[${GRN}%s${RED}%s${RED}]${NC} %s${NC}" "$pkg" "$bar" "$e_bar" "$spinner_char"
-            ((i++))
+            local filled=$(( i % (BAR_WIDTH + 1) ))
+            local empty=$(( BAR_WIDTH - filled ))
+
+            # ZSH FIX: Use printf width trick instead of C-style for loops.
+            # C-style ((j++)) evaluates to 0 when j reaches the limit,
+            # zsh returns exit code 1, and the j counter leaks to stdout.
+            local bar="" e_bar=""
+            [[ $filled -gt 0 ]] && bar=$(printf '%*s' "$filled" '' | tr ' ' '█')
+            [[ $empty  -gt 0 ]] && e_bar=$(printf '%*s' "$empty"  '' | tr ' ' '▒')
+
+            local sc="${sp[$(( (i % 4) + 1 ))]}"
+
+            # \r moves to column 0; no trailing newline so next frame overwrites
+            printf "\r${_C}⚡ Processing ${_B}%s${_N}: ${_R}[${_G}%s${_R}%s${_R}]${_N} %s " \
+                "$pkg" "$bar" "$e_bar" "$sc"
+
+            # ZSH FIX: avoid ((i++)) which returns exit-code 1 when i==0
+            i=$(( i + 1 ))
             sleep 0.1
         done
 
         wait "$PID" 2>/dev/null
         exit_status=$?
 
-        local cols=$(tput cols 2>/dev/null || echo 80)
-        printf "\r%-${cols}s\r" " "
+        # Clear the animation line cleanly
+        local cols
+        cols=$(tput cols 2>/dev/null || echo 80)
+        printf "\r%${cols}s\r" ""
         tput cnorm 2>/dev/null || true
 
         return $exit_status
@@ -1800,7 +1818,9 @@ uc() {
     local BLUE="\033[0;34m" CYAN="\033[0;36m" MAGENTA="\033[0;35m" NC="\033[0m"
 
     set -o pipefail
-    set -o errexit  # Exit on error
+    # ZSH FIX: errexit DISABLED — it fires the EXIT trap before LOG_FILE is
+    # initialized (leaving it empty), which causes: _log:1: no such file or directory:
+    # set -o errexit
     # ZSH FIX: nounset causes issues with unset variables in Zsh
     # set -o nounset  # DISABLED for Zsh compatibility
 
@@ -1828,6 +1848,8 @@ uc() {
     fi
 
     _log() {
+        # Guard: never write to empty path (happens if trap fires before LOG_FILE is set)
+        [[ -z "${LOG_FILE:-}" ]] && return 0
         echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> "$LOG_FILE" 2>/dev/null || true
     }
 
@@ -1836,7 +1858,9 @@ uc() {
         trap - INT TERM EXIT
         echo -e "\n${RED}⚠️  Interrupted (Exit code: $exit_code)${NC}" >&2
         _log "Session interrupted with code $exit_code"
-        exit 130
+        # ZSH FIX: use 'return' not 'exit' inside a function — 'exit' kills the
+        # entire shell and triggers "you have running jobs" from process substitutions.
+        return 130
     }
     trap _trap_exit INT TERM EXIT
 
@@ -2690,6 +2714,8 @@ EOF
         mem_total=${mem_total:-0}
         mem_used=${mem_used:-0}
         mem_pct=${mem_pct:-0}
+        # Sanitize: strip anything that isn't a digit (handles floats / empty)
+        mem_pct=$(( ${mem_pct//[^0-9]/} + 0 ))
 
         local disk_info
         disk_info=$(df -k / 2>/dev/null | awk 'NR==2{print $3, $4, $5}')
@@ -2700,9 +2726,10 @@ EOF
         read -r disk_used disk_avail disk_pct <<< "$disk_info"
         disk_used=${disk_used:-0}
         disk_avail=${disk_avail:-0}
-        disk_pct=${disk_pct:-0}
+        disk_pct=${disk_pct:-0%}
         disk_pct="${disk_pct//%/}"
-        disk_pct=${disk_pct:-0}
+        # Sanitize: strip non-digits so arithmetic is always safe
+        disk_pct=$(( ${disk_pct//[^0-9]/} + 0 ))
 
         local temp="N/A" zram_used="0"
         read -r temp zram_used < <(_get_temp_zram)
@@ -2746,9 +2773,14 @@ EOF
             [[ "$confirm" =~ ^[Yy]$ ]] && _os_clean
         fi
 
-        if [[ "$temp" != "N/A" && "$temp" -gt 80 ]]; then
-            echo -e "\n${RED}🌡️  HIGH TEMPERATURE${NC}"
-            echo -e "   ${YELLOW}Check cooling system!${NC}"
+        # ZSH FIX: Split into two checks — combining != and -gt in one [[...]] can
+        # trigger "bad math expression" when temp is "N/A" or a non-integer string.
+        if [[ "$temp" != "N/A" ]]; then
+            local temp_int=$(( ${temp//[^0-9]/} + 0 ))
+            if [[ $temp_int -gt 80 ]]; then
+                echo -e "\n${RED}🌡️  HIGH TEMPERATURE${NC}"
+                echo -e "   ${YELLOW}Check cooling system!${NC}"
+            fi
         fi
 
         _log "AI mode executed"
@@ -3280,7 +3312,7 @@ ut() {
 
     local idx=0
     for item in "${tool_list[@]}"; do
-        ((idx++))
+        idx=$(( idx + 1 ))
         local cat="" generic="" desc=""
         IFS='|' read -r cat generic desc <<< "$item"
         local pkg=$(get_pkg_name "$generic")
@@ -3336,8 +3368,9 @@ ut() {
     [[ ${#selected_tools[@]} -eq 0 ]] && { echo -e "${YELLOW}⚠️ Nothing selected${NC}"; return 0; }
 
     echo -e "${CYAN}📋 Selected ${#selected_tools[@]} tools:${NC}"
-    for i in "${!selected_tools[@]}"; do
-        echo -e "  ${GREEN}●${NC} ${selected_tools[$i]} (${actual_packages[$i]})"
+    local _i
+    for (( _i = 1; _i <= ${#selected_tools[@]}; _i++ )); do
+        echo -e "  ${GREEN}●${NC} ${selected_tools[$_i]} (${actual_packages[$_i]})"
     done
 
     # ===== ⬇️ INSTALL & CONFIG ENGINE =====
@@ -3380,9 +3413,10 @@ ut() {
     local failed_pkgs=()
     local installed_pkgs=()
 
-    for i in "${!selected_tools[@]}"; do
-        local t="${selected_tools[$i]}"
-        local pkg="${actual_packages[$i]}"
+    local _j
+    for (( _j = 1; _j <= ${#selected_tools[@]}; _j++ )); do
+        local t="${selected_tools[$_j]}"
+        local pkg="${actual_packages[$_j]}"
 
         echo -n -e "${WHITE}📦 $t (${pkg})... ${NC}"
 
