@@ -854,6 +854,14 @@
 							class="cmd-cat-btn"
 							role="tab"
 							aria-selected="false"
+							data-cat="docker"
+							id="cmd-tab-docker">
+							🐳 Docker
+						</button>
+						<button
+							class="cmd-cat-btn"
+							role="tab"
+							aria-selected="false"
 							data-cat="util"
 							id="cmd-tab-util">
 							🔨 Utilities
@@ -901,6 +909,14 @@
 									<tr>
 										<td><code>des / doc / dow</code></td>
 										<td>Jump to Desktop / Documents / Downloads</td>
+									</tr>
+									<tr>
+										<td><code>pic / vid / mus</code></td>
+										<td>Jump to Pictures / Videos / Music</td>
+									</tr>
+									<tr>
+										<td><code>rd</code></td>
+										<td>Jump to root directory (<code>/</code>)</td>
 									</tr>
 								</tbody>
 							</table>
@@ -1075,9 +1091,9 @@
 										<td>Interactive JS/TS file runner via Bun</td>
 									</tr>
 									<tr>
-										<td><code>pg</code></td>
+										<td><code>pg &lt;file&gt;</code></td>
 										<td>
-											Generate <code>package.json</code> for current project
+											Smart Universal Package Converter (.deb, .rpm, .tgz)
 										</td>
 									</tr>
 								</tbody>
@@ -1158,6 +1174,78 @@
 
 					<div
 						class="cmd-panel"
+						data-panel="docker"
+						role="tabpanel"
+						aria-labelledby="cmd-tab-docker"
+						hidden>
+						<div class="cmd-table-wrapper">
+							<table class="cmd-table">
+								<thead>
+									<tr>
+										<th>Command</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>dps / dpsa</code></td>
+										<td>List running / all containers (clean table format)</td>
+									</tr>
+									<tr>
+										<td><code>di / dvl / dnl</code></td>
+										<td>List all images / volumes / networks</td>
+									</tr>
+									<tr>
+										<td><code>dsize / dtop</code></td>
+										<td>Monitor Docker disk space / container stats</td>
+									</tr>
+									<tr>
+										<td><code>dstop / dkill</code></td>
+										<td>Stop / force kill a container</td>
+									</tr>
+									<tr>
+										<td><code>drm / drmi</code></td>
+										<td>Remove container / remove image</td>
+									</tr>
+									<tr>
+										<td><code>dstopall / drmall</code></td>
+										<td>Stop all / remove all containers</td>
+									</tr>
+									<tr>
+										<td><code>dsh &lt;name&gt;</code></td>
+										<td>Enter container terminal</td>
+									</tr>
+									<tr>
+										<td><code>dlogs &lt;name&gt;</code></td>
+										<td>Live tail container logs</td>
+									</tr>
+									<tr>
+										<td><code>dbuild / dbuild-nocache</code></td>
+										<td>Build image / build without cache</td>
+									</tr>
+									<tr>
+										<td><code>dcup / dcdn</code></td>
+										<td>Docker Compose up -d / down</td>
+									</tr>
+									<tr>
+										<td><code>dtest-*</code></td>
+										<td>Quick test container (<code>-ubuntu</code>, <code>-node</code>, <code>-alpine</code>)</td>
+									</tr>
+									<tr>
+										<td><code>dfind &lt;name&gt;</code></td>
+										<td>Search containers and images by name</td>
+									</tr>
+									<tr>
+										<td><code>dclean</code></td>
+										<td>Deep clean system (prune all unused resources)</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<div
+						class="cmd-panel"
 						data-panel="util"
 						role="tabpanel"
 						aria-labelledby="cmd-tab-util"
@@ -1173,6 +1261,11 @@
 								</thead>
 								<tbody>
 									<tr>
+										<td><code>cf [dir]</code></td>
+										<td>Advanced FZF Quick CD with preview</td>
+										<td><code>cf .</code></td>
+									</tr>
+									<tr>
 										<td><code>mkd &lt;name&gt;</code></td>
 										<td>Create directory and <code>cd</code> into it</td>
 										<td><code>mkd my-app</code></td>
@@ -1181,6 +1274,16 @@
 										<td><code>rmd &lt;name&gt;</code></td>
 										<td>Force remove directory recursively</td>
 										<td><code>rmd old-build</code></td>
+									</tr>
+									<tr>
+										<td><code>rmf &lt;file&gt;</code></td>
+										<td>Remove file with confirmation</td>
+										<td><code>rmf test.txt</code></td>
+									</tr>
+									<tr>
+										<td><code>rn [dir]</code></td>
+										<td>Clean and bulk rename files in directory</td>
+										<td><code>rn .</code></td>
 									</tr>
 									<tr>
 										<td><code>bak &lt;file&gt;</code></td>
