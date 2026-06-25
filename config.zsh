@@ -713,7 +713,7 @@ uu() {
     local FZF_CMD=""
     FZF_CMD=$(whence -p fzf 2>/dev/null)
     [[ -z "$FZF_CMD" ]] && FZF_CMD=$(command -v fzf 2>/dev/null)
-    [[ -z "$FZF_CMD" ]] && FZF_CMD=$(type -P fzf 2>/dev/null)
+    [[ -z "$FZF_CMD" ]] && FZF_CMD=$(command -v fzf 2>/dev/null)
 
     if [[ -z "$FZF_CMD" ]]; then
         local fzf_paths=(
@@ -741,7 +741,7 @@ uu() {
         rehash 2>/dev/null || true
         FZF_CMD=$(whence -p fzf 2>/dev/null)
         [[ -z "$FZF_CMD" ]] && FZF_CMD=$(command -v fzf 2>/dev/null)
-        [[ -z "$FZF_CMD" ]] && FZF_CMD=$(type -P fzf 2>/dev/null)
+        [[ -z "$FZF_CMD" ]] && FZF_CMD=$(command -v fzf 2>/dev/null)
     fi
 
     if [[ -z "$FZF_CMD" ]] || [[ ! -x "$FZF_CMD" ]]; then
@@ -775,10 +775,11 @@ uu() {
             local empty=$((20 - filled))
             local bar=""
             local j
-            for ((j=0; j<<filled; j++)); do bar+="█"; done
+            for ((j=0; j<filled; j++)); do bar+="█"; done
             local e_bar=""
-            for ((j=0; j<<empty; j++)); do e_bar+="▒"; done
-            printf "\r${CYN}⚡ Processing ${BOLD}%s${NC}: ${RED}[${GRN}%s${RED}%s${RED}]${NC} %s${NC}" "$pkg" "$bar" "$e_bar" "${sp:i%4:1}"
+            for ((j=0; j<empty; j++)); do e_bar+="▒"; done
+            local spinner_char="${sp[$((i % 4 + 1))]}"
+            printf "\r${CYN}⚡ Processing ${BOLD}%s${NC}: ${RED}[${GRN}%s${RED}%s${RED}]${NC} %s${NC}" "$pkg" "$bar" "$e_bar" "$spinner_char"
             ((i++))
             sleep 0.1
         done
@@ -2680,22 +2681,33 @@ EOF
 
         # Get system stats
         local mem_info
-        mem_info=$(free | awk '/Mem:/{printf "%.0f %.0f %.0f", $2, $3, ($3/$2)*100}')
-        local mem_total="${mem_info%% *}"
-        local mem_used="${mem_info#* }"
-        mem_used="${mem_used%% *}"
-        local mem_pct="${mem_info##* }"
+        mem_info=$(free -k 2>/dev/null | awk '/^Mem:/{printf "%.0f %.0f %.0f", $2, $3, ($3/$2)*100}')
+        if [[ -z "$mem_info" ]]; then
+            mem_info="0 0 0"
+        fi
+        local mem_total mem_used mem_pct
+        read -r mem_total mem_used mem_pct <<< "$mem_info"
+        mem_total=${mem_total:-0}
+        mem_used=${mem_used:-0}
+        mem_pct=${mem_pct:-0}
 
         local disk_info
-        disk_info=$(df -k / | awk 'NR==2{print $3, $4, $5}')
-        local disk_used="${disk_info%% *}"
-        local disk_avail="${disk_info#* }"
-        disk_avail="${disk_avail%% *}"
-        local disk_pct="${disk_info##* }"
+        disk_info=$(df -k / 2>/dev/null | awk 'NR==2{print $3, $4, $5}')
+        if [[ -z "$disk_info" ]]; then
+            disk_info="0 0 0%"
+        fi
+        local disk_used disk_avail disk_pct
+        read -r disk_used disk_avail disk_pct <<< "$disk_info"
+        disk_used=${disk_used:-0}
+        disk_avail=${disk_avail:-0}
+        disk_pct=${disk_pct:-0}
         disk_pct="${disk_pct//%/}"
+        disk_pct=${disk_pct:-0}
 
-        local temp zram_used
+        local temp="N/A" zram_used="0"
         read -r temp zram_used < <(_get_temp_zram)
+        temp=${temp:-N/A}
+        zram_used=${zram_used:-0}
 
         # Display
         echo -e "📊 ${CYAN}System Status:${NC}"
@@ -3050,13 +3062,13 @@ ut() {
     local FZF_CMD=""
     FZF_CMD=$(whence -p fzf 2>/dev/null)
     [[ -z "$FZF_CMD" ]] && FZF_CMD=$(command -v fzf 2>/dev/null)
-    [[ -z "$FZF_CMD" ]] && FZF_CMD=$(type -P fzf 2>/dev/null)
+    [[ -z "$FZF_CMD" ]] && FZF_CMD=$(command -v fzf 2>/dev/null)
 
     if [[ -z "$FZF_CMD" ]]; then
         install_fzf_universal
         FZF_CMD=$(whence -p fzf 2>/dev/null)
         [[ -z "$FZF_CMD" ]] && FZF_CMD=$(command -v fzf 2>/dev/null)
-        [[ -z "$FZF_CMD" ]] && FZF_CMD=$(type -P fzf 2>/dev/null)
+        [[ -z "$FZF_CMD" ]] && FZF_CMD=$(command -v fzf 2>/dev/null)
     fi
 
     if [[ -z "$FZF_CMD" ]] || [[ ! -x "$FZF_CMD" ]]; then
