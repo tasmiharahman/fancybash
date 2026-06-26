@@ -3886,11 +3886,16 @@ compinit
 # Autocomplete and Syntax Highlighting
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Command history settings
 HISTFILE=~/.zsh_history
 HISTSIZE=50000
 SAVEHIST=50000
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 # Share history between multiple terminals
 setopt share_history

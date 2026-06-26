@@ -166,6 +166,29 @@ $p = $PROFILE; (Get-Content $p -Raw) -replace '(?s)# >>> fancy-powershell >>>.*?
 
 ---
 
+## 🦄 Zsh Plugins Setup
+
+fancybash (`config.zsh`) automatically loads **zsh-autosuggestions** and **zsh-syntax-highlighting** if they are present in the `~/.zsh/` directory.
+
+### 1 — Create the plugin directory
+
+```bash
+mkdir -p ~/.zsh
+```
+
+### 2 — Clone the plugins
+
+```bash
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
+```
+
+### 3 — Restart your terminal
+
+Open a new terminal window, and both plugins will work automatically!
+
+---
+
 ## ⚙️ Font Setup (for Emoji & Icons)
 
 fancybash uses color emoji and Fira Code ligatures in the prompt. Follow these steps for the best experience:

@@ -866,6 +866,8 @@ img {
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: var(--radius-md);
   overflow: hidden;
+  min-width: 0;
+  width: 100%;
 }
 
 .code-header {
@@ -917,6 +919,7 @@ img {
 .code-block pre {
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
+  min-width: 0;
 }
 
 .code-block code {
@@ -927,6 +930,8 @@ img {
   font-family: var(--font-mono);
   line-height: 1.6;
   white-space: pre;
+  display: block;
+  min-width: 0;
 }
 
 /* Install Steps */
@@ -1632,6 +1637,179 @@ img {
   .footer-links {
     justify-content: center;
   }
+}
+
+/* =====================
+   Zsh Setup Section
+   ===================== */
+.zsh-setup-section {
+  background: var(--clr-bg-2);
+  position: relative;
+  overflow: hidden;
+}
+
+.zsh-setup-section::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.07), transparent 65%);
+  pointer-events: none;
+}
+
+.zsh-setup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.zsh-step-card {
+  background: var(--grad-card);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.zsh-step-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--clr-cyan), var(--clr-purple));
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.zsh-step-card:hover {
+  border-color: rgba(34, 211, 238, 0.35);
+  box-shadow: var(--shadow-card), var(--shadow-glow-cyan);
+  transform: translateY(-3px);
+}
+
+.zsh-step-card:hover::before { opacity: 1; }
+
+.zsh-step-card--wide {
+  grid-column: span 2;
+}
+
+.zsh-step-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.zsh-step-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--clr-cyan);
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.zsh-step-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.zsh-step-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--clr-text);
+  margin-bottom: 0.25rem;
+}
+
+.zsh-step-header p {
+  font-size: 0.875rem;
+  color: var(--clr-text-muted);
+  line-height: 1.55;
+}
+
+/* Two-column plugin layout inside a wide card */
+.zsh-plugins-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.zsh-plugin-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.zsh-plugin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 99px;
+  border: 1px solid;
+  width: fit-content;
+}
+
+.zsh-plugin-badge--green {
+  color: var(--clr-green);
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.zsh-plugin-badge--cyan {
+  color: var(--clr-cyan);
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.3);
+}
+
+.zsh-plugin-desc {
+  font-size: 0.85rem;
+  color: var(--clr-text-muted);
+  line-height: 1.55;
+}
+
+/* Tip / warning box */
+.zsh-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(245, 158, 11, 0.07);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--clr-text-muted);
+  line-height: 1.55;
+}
+
+.zsh-tip-icon { flex-shrink: 0; font-size: 1rem; }
+
+/* Comment color in code blocks */
+.t-comment { color: var(--clr-text-dim); font-style: italic; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .zsh-setup-grid { grid-template-columns: 1fr; }
+  .zsh-step-card--wide { grid-column: span 1; }
+  .zsh-plugins-two-col { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
