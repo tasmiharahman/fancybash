@@ -3233,7 +3233,43 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-alias drive='cd /media/Rihad/085df205-a554-40c8-b0b1-59a1ad469a94'
+# alias drive='cd /media/Rihad/085df205-a554-40c8-b0b1-59a1ad469a94'
+
+drive() {
+    # 1st and 2nd drive er unique sesh ongsho (UUID) ekhane bosiye din
+    local drive1_uuid="469a94"
+    local drive2_uuid="b2c89f" # <--- Apnar 2nd drive er UUID match kore niben
+
+    local selected_uuid=""
+    local target_path=""
+
+    # Kon drive e jabe seta select korbe
+    if [[ "$1" == "1" || -z "$1" ]]; then
+        selected_uuid="$drive1_uuid"
+    elif [[ "$1" == "2" ]]; then
+        selected_uuid="$drive2_uuid"
+    else
+        echo "❌ Invalid option! Use: 'drive' or 'drive 1', 'drive 2'"
+        return 1
+    fi
+
+    # Bash-e dynamically path khunje ber korar upay
+    # /media/ er bhitore thaka path gulo loop korbe
+    for path in /media/*/*"$selected_uuid"*/ /media/*/*"$selected_uuid"; do
+        if [ -d "$path" ]; then
+            target_path="$path"
+            break
+        fi
+    done
+
+    # Path jodi thikthak thake tahole cd korbe
+    if [ -d "$target_path" ]; then
+        cd "$target_path"
+        echo "📂 Switched to: $PWD"
+    else
+        echo "❌ Error: Driveটি খুঁজে পাওয়া যায়নি! এটি কি মাউন্ট করা আছে?"
+    fi
+}
 
 
 # --- Quick Folder Jumps (Change paths as needed) ---

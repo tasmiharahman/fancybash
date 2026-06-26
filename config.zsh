@@ -3715,7 +3715,30 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-alias drive='cd /media/Rihad/085df205-a554-40c8-b0b1-59a1ad469a94'
+# alias drive='cd /media/Rihad/085df205-a554-40c8-b0b1-59a1ad469a94'
+
+drive() {
+    local drive1_uuid="469a94"
+    local drive2_uuid="b2c89f" # Apnar 2nd drive er UUID match kore niben
+
+    local target_path=""
+
+    if [[ "$1" == "1" || -z "$1" ]]; then
+        target_path=$(print /media/*/*${drive1_uuid}(-N))
+    elif [[ "$1" == "2" ]]; then
+        target_path=$(print /media/*/*${drive2_uuid}(-N))
+    else
+        echo "❌ Invalid option! Use: 'drive' or 'drive 1', 'drive 2'"
+        return 1
+    fi
+
+    if [ -d "$target_path" ]; then
+        cd "$target_path"
+        echo "📂 Switched to: $target_path"
+    else
+        echo "❌ Error: Driveটি খুঁজে পাওয়া যায়নি!"
+    fi
+}
 
 
 # --- Quick Folder Jumps (Change paths as needed) ---
