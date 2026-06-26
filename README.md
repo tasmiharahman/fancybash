@@ -166,26 +166,47 @@ $p = $PROFILE; (Get-Content $p -Raw) -replace '(?s)# >>> fancy-powershell >>>.*?
 
 ---
 
-## 🦄 Zsh Plugins Setup
+## 🦄 Zsh Setup Guide
 
-fancybash (`config.zsh`) automatically loads **zsh-autosuggestions** and **zsh-syntax-highlighting** if they are present in the `~/.zsh/` directory.
+Install Zsh, set it as your default shell, and supercharge it with syntax highlighting and autosuggestions — no framework needed.
 
-### 1 — Create the plugin directory
+### 1 — Install Git & Zsh
+
+For Ubuntu/Debian-based systems:
+
+```bash
+sudo apt update && sudo apt install git zsh -y
+```
+
+### 2 — Verify & Set as Default
+
+Check the installed version, then set Zsh as your default shell. Log out and back in for this to take effect.
+
+```bash
+zsh --version
+chsh -s $(which zsh)
+```
+
+### 3 — Create Plugin Folder
+
+fancybash (`config.zsh`) automatically loads plugins if they are present in the `~/.zsh/` directory.
 
 ```bash
 mkdir -p ~/.zsh
 ```
 
-### 2 — Clone the plugins
+### 4 — Install Plugins via Git
+
+Clone both plugins directly — no plugin manager required.
 
 ```bash
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.zsh/zsh-autosuggestions
 ```
 
-### 3 — Restart your terminal
+### 5 — Restart your terminal
 
-Open a new terminal window, and both plugins will work automatically!
+Open a new terminal window. fancybash will auto-source the plugins and everything will work automatically!
 
 ---
 
