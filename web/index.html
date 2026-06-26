@@ -54,8 +54,7 @@
 					<li><a href="#features">Features</a></li>
 					<li><a href="#install">Install</a></li>
 					<li><a href="#uninstall-details">Uninstall</a></li>
-					<li><a href="#zsh-setup">Zsh Setup</a></li>
-					<li><a href="#font-setup">Font Setup</a></li>
+					<li><a href="#shell-setup">Shell Setup</a></li>
 					<li><a href="#commands">Commands</a></li>
 					<li><a href="#prompt">Prompt</a></li>
 					<li>
@@ -94,8 +93,7 @@
 					<a href="#features">Features</a>
 					<a href="#install">Install</a>
 					<a href="#uninstall-details">Uninstall</a>
-					<a href="#zsh-setup">Zsh Setup</a>
-					<a href="#font-setup">Font Setup</a>
+					<a href="#shell-setup">Shell Setup</a>
 					<a href="#commands">Commands</a>
 					<a href="#prompt">Prompt</a>
 					<a
@@ -791,273 +789,128 @@
 				</div>
 			</section>
 
-			<!-- Zsh Setup Section -->
+			<!-- Shell Setup Section -->
 			<section
-				id="zsh-setup"
-				class="section zsh-setup-section"
-				aria-labelledby="zsh-setup-heading">
+				id="shell-setup"
+				class="section shell-setup-section"
+				aria-labelledby="shell-setup-heading">
 				<div class="section-inner">
 					<div class="section-header">
-						<span class="section-eyebrow">Zsh Power-Up</span>
+						<span class="section-eyebrow">Shell Power-Up</span>
 						<h2
-							id="zsh-setup-heading"
+							id="shell-setup-heading"
 							class="section-title">
-							Zsh <span class="gradient-text">Setup Guide</span>
+							Shell <span class="gradient-text">Setup Guide</span>
 						</h2>
 						<p class="section-desc">
-							Install Zsh, set it as your default shell, then clone the two plugins into <code>~/.zsh/</code> — fancybash auto-sources them for you.
+							Step-by-step instructions to get your favorite shell ready for fancybash.
 						</p>
 					</div>
 
-					<div class="zsh-setup-grid">
+					<div class="setup-tabs" role="tablist" aria-label="Shell setup selection">
+						<button class="setup-tab-btn active" role="tab" aria-selected="true" aria-controls="setup-tab-bash" data-setup-tab="bash">🐧 Bash</button>
+						<button class="setup-tab-btn" role="tab" aria-selected="false" aria-controls="setup-tab-zsh" data-setup-tab="zsh">🦄 Zsh</button>
+						<button class="setup-tab-btn" role="tab" aria-selected="false" aria-controls="setup-tab-ps" data-setup-tab="ps">🪟 PowerShell</button>
+											</div>
 
-						<!-- Step 1: Install Zsh -->
-						<div class="zsh-step-card" id="zsh-step-install">
-							<div class="zsh-step-header">
-								<div class="zsh-step-num">01</div>
-								<div class="zsh-step-icon">🦄</div>
-								<div>
-									<h3>Install Git & Zsh</h3>
-									<p>Install Git and Zsh via apt on Ubuntu/Debian-based systems.</p>
-								</div>
-							</div>
-							<div class="code-block" id="code-zsh-install">
-								<div class="code-header">
-									<span class="code-lang">bash</span>
-									<button
-										class="copy-btn"
-										aria-label="Copy install zsh command"
-										data-copy="sudo apt update &amp;&amp; sudo apt install git zsh -y">
-										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-											<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-											<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-										</svg>
-										Copy
-									</button>
-								</div>
-								<pre><code>sudo apt update &amp;&amp; sudo apt install git zsh -y</code></pre>
-							</div>
-						</div>
-
-						<!-- Step 2: Verify & Set Default -->
-						<div class="zsh-step-card" id="zsh-step-verify">
-							<div class="zsh-step-header">
-								<div class="zsh-step-num">02</div>
-								<div class="zsh-step-icon">✅</div>
-								<div>
-									<h3>Verify &amp; Set as Default</h3>
-									<p>Check the installed version, then set Zsh as your default shell.</p>
-								</div>
-							</div>
-							<div class="code-block" id="code-zsh-default">
-								<div class="code-header">
-									<span class="code-lang">bash</span>
-									<button
-										class="copy-btn"
-										aria-label="Copy zsh version and set default commands"
-										data-copy="zsh --version&#10;chsh -s $(which zsh)">
-										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-											<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-											<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-										</svg>
-										Copy
-									</button>
-								</div>
-								<pre><code>zsh --version
-chsh -s $(which zsh)</code></pre>
-							</div>
-							<p class="zsh-tip"><span class="zsh-tip-icon">💡</span> Log out and back in for the default shell change to take effect.</p>
-						</div>
-
-						<!-- Step 3: Create Plugin Directory -->
-						<div class="zsh-step-card" id="zsh-step-plugins-dir">
-							<div class="zsh-step-header">
-								<div class="zsh-step-num">03</div>
-								<div class="zsh-step-icon">📂</div>
-								<div>
-									<h3>Create Plugin Folder</h3>
-									<p>fancybash loads plugins from the <code>~/.zsh/</code> folder. Create this directory.</p>
-								</div>
-							</div>
-							<div class="code-block" id="code-zsh-plugins-dir">
-								<div class="code-header">
-									<span class="code-lang">bash</span>
-									<button
-										class="copy-btn"
-										aria-label="Copy create plugins directory command"
-										data-copy="mkdir -p ~/.zsh">
-										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-											<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-											<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-										</svg>
-										Copy
-									</button>
-								</div>
-								<pre><code>mkdir -p ~/.zsh</code></pre>
-							</div>
-						</div>
-
-						<!-- Step 4: Install Plugins -->
-						<div class="zsh-step-card zsh-step-card--wide" id="zsh-step-clone">
-							<div class="zsh-step-header">
-								<div class="zsh-step-num">04</div>
-								<div class="zsh-step-icon">🔌</div>
-								<div>
-									<h3>Install Plugins via Git</h3>
-									<p>Clone both plugins — no plugin manager required.</p>
-								</div>
-							</div>
-							<div class="zsh-plugins-two-col">
-								<!-- Syntax Highlighting -->
-								<div class="zsh-plugin-item">
-									<div class="zsh-plugin-badge zsh-plugin-badge--green">
-										<span>🎨</span> zsh-syntax-highlighting
+					<div class="setup-tab-panels">
+						<!-- Bash Setup -->
+						<div class="setup-tab-panel active" role="tabpanel" id="setup-tab-bash" aria-labelledby="setup-tab-btn-bash">
+							<div class="zsh-setup-grid">
+								<!-- Step 1: Install Bash & Git -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">01</div>
+										<div class="zsh-step-icon">🐧</div>
+										<div>
+											<h3>Install Git & Bash</h3>
+											<p>Bash is usually pre-installed on Linux. Ensure you have Git.</p>
+										</div>
 									</div>
-									<p class="zsh-plugin-desc">Color-codes commands in real time — valid commands turn green, invalid ones turn red.</p>
-									<div class="code-block" id="code-plugin-syntax">
+									<div class="code-block">
 										<div class="code-header">
 											<span class="code-lang">bash</span>
-											<button
-												class="copy-btn"
-												aria-label="Copy syntax highlighting clone command"
-												data-copy="git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting">
-												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-													<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-													<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-												</svg>
-												Copy
-											</button>
+											<button class="copy-btn" data-copy="sudo apt update &amp;&amp; sudo apt install git bash -y">Copy</button>
 										</div>
-										<pre><code>git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
-  ~/.zsh/zsh-syntax-highlighting</code></pre>
+										<pre><code>sudo apt update &amp;&amp; sudo apt install git bash -y</code></pre>
 									</div>
 								</div>
-								<!-- Autosuggestions -->
-								<div class="zsh-plugin-item">
-									<div class="zsh-plugin-badge zsh-plugin-badge--cyan">
-										<span>💡</span> zsh-autosuggestions
+
+								<!-- Step 2: Verify & Set Default -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">02</div>
+										<div class="zsh-step-icon">✅</div>
+										<div>
+											<h3>Verify &amp; Set as Default</h3>
+											<p>Check the installed version and set Bash as default.</p>
+										</div>
 									</div>
-									<p class="zsh-plugin-desc">Suggests commands from your history as you type — press <code>→</code> to accept.</p>
-									<div class="code-block" id="code-plugin-autosugg">
+									<div class="code-block">
 										<div class="code-header">
 											<span class="code-lang">bash</span>
-											<button
-												class="copy-btn"
-												aria-label="Copy autosuggestions clone command"
-												data-copy="git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.zsh/zsh-autosuggestions">
-												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-													<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-													<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-												</svg>
-												Copy
-											</button>
+											<button class="copy-btn" data-copy="bash --version&#10;chsh -s $(which bash)">Copy</button>
 										</div>
-										<pre><code>git clone https://github.com/zsh-users/zsh-autosuggestions.git \
-  ~/.zsh/zsh-autosuggestions</code></pre>
+										<pre><code>bash --version
+chsh -s $(which bash)</code></pre>
+									</div>
+									<p class="zsh-tip"><span class="zsh-tip-icon">💡</span> Log out and back in for the default shell change to take effect.</p>
+								</div>
+
+								<!-- Step 3: Install Emoji Font -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">03</div>
+										<div class="zsh-step-icon">😀</div>
+										<div>
+											<h3>Install Emoji Font</h3>
+											<p>Install the Noto Color Emoji font for full emoji support.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" data-copy="sudo apt install fonts-noto-color-emoji">Copy</button>
+										</div>
+										<pre><code>sudo apt install fonts-noto-color-emoji</code></pre>
 									</div>
 								</div>
-							</div>
-						</div>
 
-						<!-- Step 5: Done -->  
-						<div class="zsh-step-card zsh-step-card--wide" id="zsh-step-done">
-							<div class="zsh-step-header">
-								<div class="zsh-step-num">05</div>
-								<div class="zsh-step-icon">🎉</div>
-								<div>
-									<h3>Done! fancybash Auto-Sources the Plugins</h3>
-									<p>Just clone them into the <code>~/.zsh/</code> folder. fancybash's <code>config.zsh</code> automatically executes the following two lines.</p>
+								<!-- Step 4: Install Fira Code -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">04</div>
+										<div class="zsh-step-icon">✍️</div>
+										<div>
+											<h3>Install Fira Code</h3>
+											<p>Install Fira Code for beautiful programming ligatures.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" data-copy="sudo apt install fonts-firacode">Copy</button>
+										</div>
+										<pre><code>sudo apt install fonts-firacode</code></pre>
+									</div>
 								</div>
-							</div>
-							<div class="code-block" id="code-zshrc-source">
-								<div class="code-header">
-									<span class="code-lang">config.zsh (auto-loaded)</span>
-								</div>
-								<pre><code><span class="t-comment"># Autocomplete and Syntax Highlighting</span>
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh</code></pre>
-							</div>
-							<p class="zsh-tip" style="background:rgba(34,197,94,0.07); border-color:rgba(34,197,94,0.25);"><span class="zsh-tip-icon">✅</span> After cloning both plugins into <code>~/.zsh/</code>, open a new terminal — everything will work automatically!</p>
-						</div>
 
-					</div>
-				</div>
-			</section>
-
-			<!-- Font Setup Section -->
-			<section
-				id="font-setup"
-				class="section zsh-setup-section"
-				aria-labelledby="font-setup-heading">
-				<div class="section-inner">
-					<div class="section-header">
-						<span class="section-eyebrow">Emoji & Icons</span>
-						<h2
-							id="font-setup-heading"
-							class="section-title">
-							Font <span class="gradient-text">Setup</span>
-						</h2>
-						<p class="section-desc">
-							fancybash uses color emoji and Fira Code ligatures in the prompt. Follow these steps for the best experience.
-						</p>
-					</div>
-
-					<div class="zsh-setup-grid">
-
-						<!-- Step 1: Install Emoji Font -->
-						<div class="zsh-step-card" id="font-step-1">
-							<div class="zsh-step-header">
-								<div class="zsh-step-num">01</div>
-								<div class="zsh-step-icon">😀</div>
-								<div>
-									<h3>Install Emoji Font</h3>
-									<p>Install the Noto Color Emoji font for full emoji support.</p>
-								</div>
-							</div>
-							<div class="code-block">
-								<div class="code-header">
-									<span class="code-lang">bash</span>
-									<button class="copy-btn" data-copy="sudo apt install fonts-noto-color-emoji">Copy</button>
-								</div>
-								<pre><code>sudo apt install fonts-noto-color-emoji</code></pre>
-							</div>
-						</div>
-
-						<!-- Step 2: Install Fira Code -->
-						<div class="zsh-step-card" id="font-step-2">
-							<div class="zsh-step-header">
-								<div class="zsh-step-num">02</div>
-								<div class="zsh-step-icon">✍️</div>
-								<div>
-									<h3>Install Fira Code</h3>
-									<p>Install Fira Code for beautiful programming ligatures.</p>
-								</div>
-							</div>
-							<div class="code-block">
-								<div class="code-header">
-									<span class="code-lang">bash</span>
-									<button class="copy-btn" data-copy="sudo apt install fonts-firacode">Copy</button>
-								</div>
-								<pre><code>sudo apt install fonts-firacode</code></pre>
-							</div>
-						</div>
-
-						<!-- Step 3: Set Font Priority -->
-						<div class="zsh-step-card zsh-step-card--wide" id="font-step-3">
-							<div class="zsh-step-header">
-								<div class="zsh-step-num">03</div>
-								<div class="zsh-step-icon">⚙️</div>
-								<div>
-									<h3>Set Font Priority</h3>
-									<p>Run <code>sudo nano /etc/fonts/local.conf</code> and paste the following config to prioritize emojis.</p>
-								</div>
-							</div>
-							<div class="code-block">
-								<div class="code-header">
-									<span class="code-lang">xml</span>
-									<button class="copy-btn" data-copy='&lt;?xml version="1.0"?&gt;&#10;&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;&#10;&lt;fontconfig&gt;&#10;  &lt;alias&gt;&#10;    &lt;family&gt;monospace&lt;/family&gt;&#10;    &lt;prefer&gt;&#10;      &lt;family&gt;Fira Code&lt;/family&gt;&#10;      &lt;family&gt;Noto Color Emoji&lt;/family&gt;&#10;    &lt;/prefer&gt;&#10;  &lt;/alias&gt;&#10;&#10;  &lt;alias&gt;&#10;    &lt;family&gt;sans-serif&lt;/family&gt;&#10;    &lt;prefer&gt;&#10;      &lt;family&gt;Noto Color Emoji&lt;/family&gt;&#10;    &lt;/prefer&gt;&#10;  &lt;/alias&gt;&#10;&lt;/fontconfig&gt;'>Copy</button>
-								</div>
-								<pre><code>&lt;?xml version="1.0"?&gt;
+								<!-- Step 5: Set Font Priority -->
+								<div class="zsh-step-card zsh-step-card--wide">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">05</div>
+										<div class="zsh-step-icon">⚙️</div>
+										<div>
+											<h3>Set Font Priority</h3>
+											<p>Run <code>sudo nano /etc/fonts/local.conf</code> and paste the following config to prioritize emojis.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">xml</span>
+											<button class="copy-btn" data-copy='&lt;?xml version="1.0"?&gt;&#10;&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;&#10;&lt;fontconfig&gt;&#10;  &lt;alias&gt;&#10;    &lt;family&gt;monospace&lt;/family&gt;&#10;    &lt;prefer&gt;&#10;      &lt;family&gt;Fira Code&lt;/family&gt;&#10;      &lt;family&gt;Noto Color Emoji&lt;/family&gt;&#10;    &lt;/prefer&gt;&#10;  &lt;/alias&gt;&#10;  &lt;alias&gt;&#10;    &lt;family&gt;sans-serif&lt;/family&gt;&#10;    &lt;prefer&gt;&#10;      &lt;family&gt;Noto Color Emoji&lt;/family&gt;&#10;    &lt;/prefer&gt;&#10;  &lt;/alias&gt;&#10;&lt;/fontconfig&gt;'>Copy</button>
+										</div>
+										<pre><code>&lt;?xml version="1.0"?&gt;
 &lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
 &lt;fontconfig&gt;
   &lt;alias&gt;
@@ -1067,7 +920,6 @@ source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh</code></pre>
       &lt;family&gt;Noto Color Emoji&lt;/family&gt;
     &lt;/prefer&gt;
   &lt;/alias&gt;
-
   &lt;alias&gt;
     &lt;family&gt;sans-serif&lt;/family&gt;
     &lt;prefer&gt;
@@ -1075,47 +927,419 @@ source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh</code></pre>
     &lt;/prefer&gt;
   &lt;/alias&gt;
 &lt;/fontconfig&gt;</code></pre>
-							</div>
-						</div>
+									</div>
+								</div>
 
-						<!-- Step 4: Rebuild Font Cache -->
-						<div class="zsh-step-card" id="font-step-4">
-							<div class="zsh-step-header">
-								<div class="zsh-step-num">04</div>
-								<div class="zsh-step-icon">🔄</div>
-								<div>
-									<h3>Rebuild Font Cache</h3>
-									<p>Apply the new font configurations.</p>
+								<!-- Step 6: Rebuild Font Cache -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">06</div>
+										<div class="zsh-step-icon">🔄</div>
+										<div>
+											<h3>Rebuild Font Cache</h3>
+											<p>Apply the new font configurations.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" data-copy="fc-cache -fv">Copy</button>
+										</div>
+										<pre><code>fc-cache -fv</code></pre>
+									</div>
 								</div>
-							</div>
-							<div class="code-block">
-								<div class="code-header">
-									<span class="code-lang">bash</span>
-									<button class="copy-btn" data-copy="fc-cache -fv">Copy</button>
-								</div>
-								<pre><code>fc-cache -fv</code></pre>
-							</div>
-						</div>
 
-						<!-- Step 5: Set System Locale -->
-						<div class="zsh-step-card" id="font-step-5">
-							<div class="zsh-step-header">
-								<div class="zsh-step-num">05</div>
-								<div class="zsh-step-icon">🌐</div>
-								<div>
-									<h3>Set System Locale</h3>
-									<p>If emojis are still broken, fix your system locale and reboot.</p>
-								</div>
-							</div>
-							<div class="code-block">
-								<div class="code-header">
-									<span class="code-lang">bash</span>
-									<button class="copy-btn" data-copy="echo -e &quot;LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8\nLANGUAGE=en_US&quot; | sudo tee /etc/default/locale&#10;sudo locale-gen en_US.UTF-8&#10;sudo update-locale&#10;reboot">Copy</button>
-								</div>
-								<pre><code>echo -e "LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8\nLANGUAGE=en_US" | sudo tee /etc/default/locale
+								<!-- Step 7: Set System Locale -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">07</div>
+										<div class="zsh-step-icon">🌐</div>
+										<div>
+											<h3>Set System Locale</h3>
+											<p>If emojis are still broken, fix your system locale and reboot.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" data-copy="echo -e &quot;LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8\nLANGUAGE=en_US&quot; | sudo tee /etc/default/locale&#10;sudo locale-gen en_US.UTF-8&#10;sudo update-locale&#10;reboot">Copy</button>
+										</div>
+										<pre><code>echo -e "LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8\nLANGUAGE=en_US" | sudo tee /etc/default/locale
 sudo locale-gen en_US.UTF-8
 sudo update-locale
 reboot</code></pre>
+									</div>
+								</div>
+
+								<!-- Step 8: Install fancybash -->
+								<div class="zsh-step-card zsh-step-card--wide">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">08</div>
+										<div class="zsh-step-icon">⚡</div>
+										<div>
+											<h3>Install fancybash</h3>
+											<p>Run the one-line installer to apply fancybash to your Bash shell.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" data-copy="bash &lt;(curl -fsSL https://gist.githubusercontent.com/rihadjahanopu/a1c286e48b3ecee1a207c759279e352c/raw/install.sh)">Copy</button>
+										</div>
+										<pre><code>bash &lt;(curl -fsSL https://gist.githubusercontent.com/rihadjahanopu/a1c286e48b3ecee1a207c759279e352c/raw/install.sh)</code></pre>
+									</div>
+									<p class="zsh-tip"><span class="zsh-tip-icon">💡</span> The installer backs up your existing <code>.bashrc</code> and safely appends fancybash — safe to re-run at any time.</p>
+								</div>
+
+								<!-- Step 9: Done -->
+								<div class="zsh-step-card zsh-step-card--wide">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">09</div>
+										<div class="zsh-step-icon">🎉</div>
+										<div>
+											<h3>Done! You're ready.</h3>
+											<p>Restart your terminal and enjoy the fancybash experience on Bash!</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Zsh Setup -->
+						<div class="setup-tab-panel" role="tabpanel" id="setup-tab-zsh" aria-labelledby="setup-tab-btn-zsh" hidden>
+							<div class="zsh-setup-grid">
+								<!-- Step 1: Install Zsh -->
+								<div class="zsh-step-card" id="zsh-step-install">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">01</div>
+										<div class="zsh-step-icon">🦄</div>
+										<div>
+											<h3>Install Git & Zsh</h3>
+											<p>Install Git and Zsh via apt on Ubuntu/Debian-based systems.</p>
+										</div>
+									</div>
+									<div class="code-block" id="code-zsh-install">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" aria-label="Copy install zsh command" data-copy="sudo apt update &amp;&amp; sudo apt install git zsh -y">Copy</button>
+										</div>
+										<pre><code>sudo apt update &amp;&amp; sudo apt install git zsh -y</code></pre>
+									</div>
+								</div>
+
+								<!-- Step 2: Verify & Set Default -->
+								<div class="zsh-step-card" id="zsh-step-verify">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">02</div>
+										<div class="zsh-step-icon">✅</div>
+										<div>
+											<h3>Verify &amp; Set as Default</h3>
+											<p>Check the installed version, then set Zsh as your default shell.</p>
+										</div>
+									</div>
+									<div class="code-block" id="code-zsh-default">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" aria-label="Copy zsh version and set default commands" data-copy="zsh --version&#10;chsh -s $(which zsh)">Copy</button>
+										</div>
+										<pre><code>zsh --version
+chsh -s $(which zsh)</code></pre>
+									</div>
+									<p class="zsh-tip"><span class="zsh-tip-icon">💡</span> Log out and back in for the default shell change to take effect.</p>
+								</div>
+
+								<!-- Step 3: Create Plugin Directory -->
+								<div class="zsh-step-card" id="zsh-step-plugins-dir">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">03</div>
+										<div class="zsh-step-icon">📂</div>
+										<div>
+											<h3>Create Plugin Folder</h3>
+											<p>fancybash loads plugins from the <code>~/.zsh/</code> folder. Create this directory.</p>
+										</div>
+									</div>
+									<div class="code-block" id="code-zsh-plugins-dir">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" aria-label="Copy create plugins directory command" data-copy="mkdir -p ~/.zsh">Copy</button>
+										</div>
+										<pre><code>mkdir -p ~/.zsh</code></pre>
+									</div>
+								</div>
+
+								<!-- Step 4: Install Plugins -->
+								<div class="zsh-step-card zsh-step-card--wide" id="zsh-step-clone">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">04</div>
+										<div class="zsh-step-icon">🔌</div>
+										<div>
+											<h3>Install Plugins via Git</h3>
+											<p>Clone both plugins — no plugin manager required.</p>
+										</div>
+									</div>
+									<div class="zsh-plugins-two-col">
+										<!-- Syntax Highlighting -->
+										<div class="zsh-plugin-item">
+											<div class="zsh-plugin-badge zsh-plugin-badge--green">
+												<span>🎨</span> zsh-syntax-highlighting
+											</div>
+											<p class="zsh-plugin-desc">Color-codes commands in real time — valid commands turn green, invalid ones turn red.</p>
+											<div class="code-block" id="code-plugin-syntax">
+												<div class="code-header">
+													<span class="code-lang">bash</span>
+													<button class="copy-btn" aria-label="Copy syntax highlighting clone command" data-copy="git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting">Copy</button>
+												</div>
+												<pre><code>git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
+  ~/.zsh/zsh-syntax-highlighting</code></pre>
+											</div>
+										</div>
+										<!-- Autosuggestions -->
+										<div class="zsh-plugin-item">
+											<div class="zsh-plugin-badge zsh-plugin-badge--cyan">
+												<span>💡</span> zsh-autosuggestions
+											</div>
+											<p class="zsh-plugin-desc">Suggests commands from your history as you type — press <code>→</code> to accept.</p>
+											<div class="code-block" id="code-plugin-autosugg">
+												<div class="code-header">
+													<span class="code-lang">bash</span>
+													<button class="copy-btn" aria-label="Copy autosuggestions clone command" data-copy="git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.zsh/zsh-autosuggestions">Copy</button>
+												</div>
+												<pre><code>git clone https://github.com/zsh-users/zsh-autosuggestions.git \
+  ~/.zsh/zsh-autosuggestions</code></pre>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Step 5: Install Emoji Font -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">05</div>
+										<div class="zsh-step-icon">😀</div>
+										<div>
+											<h3>Install Emoji Font</h3>
+											<p>Install the Noto Color Emoji font for full emoji support.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" data-copy="sudo apt install fonts-noto-color-emoji">Copy</button>
+										</div>
+										<pre><code>sudo apt install fonts-noto-color-emoji</code></pre>
+									</div>
+								</div>
+
+								<!-- Step 6: Install Fira Code -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">06</div>
+										<div class="zsh-step-icon">✍️</div>
+										<div>
+											<h3>Install Fira Code</h3>
+											<p>Install Fira Code for beautiful programming ligatures.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" data-copy="sudo apt install fonts-firacode">Copy</button>
+										</div>
+										<pre><code>sudo apt install fonts-firacode</code></pre>
+									</div>
+								</div>
+
+								<!-- Step 7: Set Font Priority -->
+								<div class="zsh-step-card zsh-step-card--wide">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">07</div>
+										<div class="zsh-step-icon">⚙️</div>
+										<div>
+											<h3>Set Font Priority</h3>
+											<p>Run <code>sudo nano /etc/fonts/local.conf</code> and paste the following config to prioritize emojis.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">xml</span>
+											<button class="copy-btn" data-copy='&lt;?xml version="1.0"?&gt;&#10;&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;&#10;&lt;fontconfig&gt;&#10;  &lt;alias&gt;&#10;    &lt;family&gt;monospace&lt;/family&gt;&#10;    &lt;prefer&gt;&#10;      &lt;family&gt;Fira Code&lt;/family&gt;&#10;      &lt;family&gt;Noto Color Emoji&lt;/family&gt;&#10;    &lt;/prefer&gt;&#10;  &lt;/alias&gt;&#10;  &lt;alias&gt;&#10;    &lt;family&gt;sans-serif&lt;/family&gt;&#10;    &lt;prefer&gt;&#10;      &lt;family&gt;Noto Color Emoji&lt;/family&gt;&#10;    &lt;/prefer&gt;&#10;  &lt;/alias&gt;&#10;&lt;/fontconfig&gt;'>Copy</button>
+										</div>
+										<pre><code>&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
+&lt;fontconfig&gt;
+  &lt;alias&gt;
+    &lt;family&gt;monospace&lt;/family&gt;
+    &lt;prefer&gt;
+      &lt;family&gt;Fira Code&lt;/family&gt;
+      &lt;family&gt;Noto Color Emoji&lt;/family&gt;
+    &lt;/prefer&gt;
+  &lt;/alias&gt;
+  &lt;alias&gt;
+    &lt;family&gt;sans-serif&lt;/family&gt;
+    &lt;prefer&gt;
+      &lt;family&gt;Noto Color Emoji&lt;/family&gt;
+    &lt;/prefer&gt;
+  &lt;/alias&gt;
+&lt;/fontconfig&gt;</code></pre>
+									</div>
+								</div>
+
+								<!-- Step 8: Rebuild Font Cache -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">08</div>
+										<div class="zsh-step-icon">🔄</div>
+										<div>
+											<h3>Rebuild Font Cache</h3>
+											<p>Apply the new font configurations.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" data-copy="fc-cache -fv">Copy</button>
+										</div>
+										<pre><code>fc-cache -fv</code></pre>
+									</div>
+								</div>
+
+								<!-- Step 9: Set System Locale -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">09</div>
+										<div class="zsh-step-icon">🌐</div>
+										<div>
+											<h3>Set System Locale</h3>
+											<p>If emojis are still broken, fix your system locale and reboot.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">bash</span>
+											<button class="copy-btn" data-copy="echo -e &quot;LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8\nLANGUAGE=en_US&quot; | sudo tee /etc/default/locale&#10;sudo locale-gen en_US.UTF-8&#10;sudo update-locale&#10;reboot">Copy</button>
+										</div>
+										<pre><code>echo -e "LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8\nLANGUAGE=en_US" | sudo tee /etc/default/locale
+sudo locale-gen en_US.UTF-8
+sudo update-locale
+reboot</code></pre>
+									</div>
+								</div>
+
+								<!-- Step 10: Install fancybash -->
+								<div class="zsh-step-card zsh-step-card--wide">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">05</div>
+										<div class="zsh-step-icon">⚡</div>
+										<div>
+											<h3>Install fancybash</h3>
+											<p>Run the one-line installer to apply fancybash to your Zsh shell.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">zsh</span>
+											<button class="copy-btn" data-copy="zsh &lt;(curl -fsSL https://gist.githubusercontent.com/rihadjahanopu/fa5874bf928c2416816b7092030f1f3b/raw/install.zsh)">Copy</button>
+										</div>
+										<pre><code>zsh &lt;(curl -fsSL https://gist.githubusercontent.com/rihadjahanopu/fa5874bf928c2416816b7092030f1f3b/raw/install.zsh)</code></pre>
+									</div>
+									<p class="zsh-tip"><span class="zsh-tip-icon">💡</span> The installer backs up your existing <code>.zshrc</code> and safely appends fancybash — safe to re-run at any time.</p>
+								</div>
+
+								<!-- Step 11: Done -->
+								<div class="zsh-step-card zsh-step-card--wide" id="zsh-step-done">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">11</div>
+										<div class="zsh-step-icon">🎉</div>
+										<div>
+											<h3>Done! fancybash Auto-Sources the Plugins</h3>
+											<p>Just clone them into the <code>~/.zsh/</code> folder. fancybash's <code>config.zsh</code> automatically executes the following two lines.</p>
+										</div>
+									</div>
+									<div class="code-block" id="code-zshrc-source">
+										<div class="code-header">
+											<span class="code-lang">config.zsh (auto-loaded)</span>
+										</div>
+										<pre><code><span class="t-comment"># Autocomplete and Syntax Highlighting</span>
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh</code></pre>
+									</div>
+									<p class="zsh-tip" style="background:rgba(34,197,94,0.07); border-color:rgba(34,197,94,0.25);"><span class="zsh-tip-icon">✅</span> After cloning both plugins into <code>~/.zsh/</code>, open a new terminal — everything will work automatically!</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- PowerShell Setup -->
+						<div class="setup-tab-panel" role="tabpanel" id="setup-tab-ps" aria-labelledby="setup-tab-btn-ps" hidden>
+							<div class="zsh-setup-grid">
+								<!-- Step 1: Install PowerShell -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">01</div>
+										<div class="zsh-step-icon">🪟</div>
+										<div>
+											<h3>Install PowerShell</h3>
+											<p>Install PowerShell via winget (Windows) or apt (Linux).</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">cmd (Windows)</span>
+											<button class="copy-btn" data-copy="winget install --id Microsoft.Powershell --source winget">Copy</button>
+										</div>
+										<pre><code>winget install --id Microsoft.Powershell --source winget</code></pre>
+									</div>
+								</div>
+
+								<!-- Step 2: Install Git -->
+								<div class="zsh-step-card">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">02</div>
+										<div class="zsh-step-icon">🌿</div>
+										<div>
+											<h3>Install Git</h3>
+											<p>Git is required for fancybash to work properly.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">cmd (Windows)</span>
+											<button class="copy-btn" data-copy="winget install --id Git.Git -e --source winget">Copy</button>
+										</div>
+										<pre><code>winget install --id Git.Git -e --source winget</code></pre>
+									</div>
+								</div>
+
+								<!-- Step 3: Install fancybash -->
+								<div class="zsh-step-card zsh-step-card--wide">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">03</div>
+										<div class="zsh-step-icon">⚡</div>
+										<div>
+											<h3>Install fancybash</h3>
+											<p>Run the one-line PowerShell installer to apply fancybash to your <code>$PROFILE</code>.</p>
+										</div>
+									</div>
+									<div class="code-block">
+										<div class="code-header">
+											<span class="code-lang">powershell</span>
+											<button class="copy-btn" data-copy="Set-ExecutionPolicy Bypass -Scope Process -Force; iex (irm https://gist.githubusercontent.com/rihadjahanopu/54b3d3bf8aac456b1aa19a62ac76a993/raw/install.ps1)">Copy</button>
+										</div>
+										<pre><code>Set-ExecutionPolicy Bypass -Scope Process -Force; iex (irm https://gist.githubusercontent.com/rihadjahanopu/54b3d3bf8aac456b1aa19a62ac76a993/raw/install.ps1)</code></pre>
+									</div>
+									<p class="zsh-tip"><span class="zsh-tip-icon">💡</span> The installer backs up your existing <code>$PROFILE</code> and safely appends fancybash — safe to re-run at any time.</p>
+								</div>
+
+								<!-- Step 4: Done -->
+								<div class="zsh-step-card zsh-step-card--wide">
+									<div class="zsh-step-header">
+										<div class="zsh-step-num">04</div>
+										<div class="zsh-step-icon">🎉</div>
+										<div>
+											<h3>Done! You're ready.</h3>
+											<p>Restart PowerShell and enjoy the fancybash experience!</p>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 

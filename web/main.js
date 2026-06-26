@@ -108,6 +108,34 @@ utabBtns.forEach(btn => {
   });
 });
 
+// ─── Setup tab switching ──────────────────────────────────
+const setupTabBtns = document.querySelectorAll('.setup-tab-btn');
+const setupTabPanels = document.querySelectorAll('.setup-tab-panel');
+
+setupTabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetTab = btn.dataset.setupTab;
+
+    setupTabBtns.forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    setupTabPanels.forEach(p => {
+      p.classList.remove('active');
+      p.hidden = true;
+    });
+
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+
+    const panel = document.getElementById(`setup-tab-${targetTab}`);
+    if (panel) {
+      panel.classList.add('active');
+      panel.hidden = false;
+    }
+  });
+});
+
 // ─── Command category tabs ────────────────────────────────
 const cmdCatBtns = document.querySelectorAll('.cmd-cat-btn');
 const cmdPanels = document.querySelectorAll('.cmd-panel');

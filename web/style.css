@@ -809,7 +809,8 @@ img {
   border-bottom: 1px solid var(--clr-border);
 }
 
-.install-tabs {
+.install-tabs,
+.setup-tabs {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
@@ -822,7 +823,8 @@ img {
   margin-right: auto;
 }
 
-.tab-btn {
+.tab-btn,
+.setup-tab-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -838,20 +840,24 @@ img {
   transition: all var(--transition);
 }
 
-.tab-btn.active {
+.tab-btn.active,
+.setup-tab-btn.active {
   background: var(--grad-primary);
   color: #fff;
   box-shadow: 0 2px 12px rgba(168, 85, 247, 0.3);
 }
 
-.tab-btn:not(.active):hover {
+.tab-btn:not(.active):hover,
+.setup-tab-btn:not(.active):hover {
   background: rgba(255,255,255,0.06);
   color: var(--clr-text);
 }
 
-.tab-panels { margin-bottom: 3rem; }
+.tab-panels,
+.setup-tab-panels { margin-bottom: 3rem; }
 
-.tab-panel {
+.tab-panel,
+.setup-tab-panel {
   animation: fadeSlideIn 0.3s var(--ease-out);
 }
 
