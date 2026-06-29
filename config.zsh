@@ -1235,7 +1235,7 @@ uup() {
     sudo -v || return
     (while true; do sudo -n true; sleep 60; done) 2>/dev/null &
     local SUDO_PID=$!
-    trap "kill $SUDO_PID 2>/dev/null" RETURN INT TERM
+    trap "kill $SUDO_PID 2>/dev/null" EXIT INT TERM
 
     # --- Execute All Logic ---
     if [[ "$SELECTED_TASKS" == *"0. ALL_MAINTENANCE_TASKS"* ]]; then
