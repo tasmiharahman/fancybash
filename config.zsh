@@ -355,14 +355,8 @@ function next() {
   echo "2) NPM"
   vared -p "Choice: " -c c
   case "$c" in
-    1)
-      bunx create-next-app@latest .
-      npm approve-scripts --allow-scripts-pending
-      ;;
-    2)
-      npx create-next-app@latest .
-      npm approve-scripts --allow-scripts-pending
-      ;;
+    1) bunx create-next-app@latest . ;;
+    2) npx create-next-app@latest . ;;
     *) echo "Invalid choice" ;;
   esac
 }
@@ -432,7 +426,6 @@ vite() {
           [[ "$force" == "y" ]] && bun add tailwindcss @tailwindcss/vite --force
         fi
       fi
-      npm approve-scripts --allow-scripts-pending
       ;;
     2)
       npx create-vite@latest .
@@ -443,7 +436,6 @@ vite() {
           [[ "$legacy" == "y" ]] && npm install tailwindcss @tailwindcss/vite --legacy-peer-deps
         fi
       fi
-      npm approve-scripts --allow-scripts-pending
       ;;
     *) echo "Invalid choice"; return ;;
   esac

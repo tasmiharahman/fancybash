@@ -91,27 +91,15 @@ function init {
 function next {
     Write-Host "⚡ Setup Next.js with:`n1) Bun`n2) NPM"
     $choice = Read-Host "Choice"
-    if ($choice -eq '1') {
-        bunx create-next-app@latest .
-        npm approve-scripts --allow-scripts-pending
-    }
-    elseif ($choice -eq '2') {
-        npx create-next-app@latest .
-        npm approve-scripts --allow-scripts-pending
-    }
+    if ($choice -eq '1') { bunx create-next-app@latest . }
+    elseif ($choice -eq '2') { npx create-next-app@latest . }
 }
 
 function vite {
     Write-Host "⚡ Setup Vite with:`n1) Bun`n2) NPM"
     $choice = Read-Host "Choice"
-    if ($choice -eq '1') {
-        bunx create-vite@latest .
-        npm approve-scripts --allow-scripts-pending
-    }
-    elseif ($choice -eq '2') {
-        npx create-vite@latest .
-        npm approve-scripts --allow-scripts-pending
-    }
+    if ($choice -eq '1') { bunx create-vite@latest . }
+    elseif ($choice -eq '2') { npx create-vite@latest . }
 }
 
 function ui {
@@ -384,7 +372,6 @@ function vite {
                     }
                 }
             }
-            npm approve-scripts --allow-scripts-pending
         }
         "2" {
             npx create-vite@latest .
@@ -399,7 +386,6 @@ function vite {
                     }
                 }
             }
-            npm approve-scripts --allow-scripts-pending
         }
         default {
             Write-Host "Invalid choice"
@@ -439,14 +425,8 @@ function next {
     $c = Read-Host "Choice"
 
     switch ($c) {
-        "1" {
-            bunx create-next-app@latest .
-            npm approve-scripts --allow-scripts-pending
-        }
-        "2" {
-            npx create-next-app@latest .
-            npm approve-scripts --allow-scripts-pending
-        }
+        "1" { bunx create-next-app@latest . }
+        "2" { npx create-next-app@latest . }
         default { Write-Host "Invalid choice" }
     }
 }
