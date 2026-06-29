@@ -439,47 +439,98 @@ _ui_patch_viteconfig() {
 }
 
 ui() {
-  echo "🎨 Setup Shadcn UI with:"
+  echo "🎨 Setup Shadcn UI"
+  echo ""
+  echo "Project type:"
+  echo "1) Vite (React)"
+  echo "2) Next.js"
+  read "project_type?Choice: "
+
+  echo ""
+  echo "Package manager:"
   echo "1) Bun"
   echo "2) NPM"
-  read "c?Choice: "
+  read "pm?Choice: "
 
   read "components?Add specific components? (e.g. button card input): "
 
-  case "$c" in
-    1)
-      echo "🧱 Initializing Shadcn UI with Bun..."
-      bunx --bun shadcn@latest init -t vite
+  # ✅ STEP 1: Patch tsconfig.json FIRST — shadcn init requires @/* path alias
+  echo ""
+  echo "⚙️  Pre-configuring path aliases before shadcn init..."
+  _ui_patch_tsconfig
 
-      if [[ -n "$components" ]]; then
-        echo "🔘 Adding components: $components..."
-        bunx --bun shadcn@latest add $components
-      else
-        echo "🔘 Adding default Button component..."
-        bunx --bun shadcn@latest add button
-      fi
+  case "$project_type" in
+    1)
+      # --- Vite project ---
+      case "$pm" in
+        1)
+          echo ""
+          echo "🧱 Initializing Shadcn UI with Bun (Vite)..."
+          bunx --bun shadcn@latest init -t vite
+          if [[ -n "$components" ]]; then
+            echo "🔘 Adding components: $components..."
+            bunx --bun shadcn@latest add $components
+          else
+            echo "🔘 Adding default Button component..."
+            bunx --bun shadcn@latest add button
+          fi
+          ;;
+        2)
+          echo ""
+          echo "🧱 Initializing Shadcn UI with NPM (Vite)..."
+          npx shadcn@latest init -t vite
+          if [[ -n "$components" ]]; then
+            echo "🔘 Adding components: $components..."
+            npx shadcn@latest add $components
+          else
+            echo "🔘 Adding default Button component..."
+            npx shadcn@latest add button
+          fi
+          ;;
+        *) echo "Invalid package manager choice"; return ;;
+      esac
+
+      # ✅ STEP 2: Patch vite.config only for Vite projects
+      echo ""
+      echo "⚙️  Patching vite.config with alias & tailwind..."
+      _ui_patch_viteconfig
       ;;
 
     2)
-      echo "🧱 Initializing Shadcn UI with NPM..."
-      npx shadcn@latest init -t vite
-
-      if [[ -n "$components" ]]; then
-        echo "🔘 Adding components: $components..."
-        npx shadcn@latest add $components
-      else
-        echo "🔘 Adding default Button component..."
-        npx shadcn@latest add button
-      fi
+      # --- Next.js project ---
+      case "$pm" in
+        1)
+          echo ""
+          echo "🧱 Initializing Shadcn UI with Bun (Next.js)..."
+          bunx --bun shadcn@latest init
+          if [[ -n "$components" ]]; then
+            echo "🔘 Adding components: $components..."
+            bunx --bun shadcn@latest add $components
+          else
+            echo "🔘 Adding default Button component..."
+            bunx --bun shadcn@latest add button
+          fi
+          ;;
+        2)
+          echo ""
+          echo "🧱 Initializing Shadcn UI with NPM (Next.js)..."
+          npx shadcn@latest init
+          if [[ -n "$components" ]]; then
+            echo "🔘 Adding components: $components..."
+            npx shadcn@latest add $components
+          else
+            echo "🔘 Adding default Button component..."
+            npx shadcn@latest add button
+          fi
+          ;;
+        *) echo "Invalid package manager choice"; return ;;
+      esac
+      # Next.js has no vite.config — skip vite patch
+      echo "  ℹ️  Next.js detected — vite.config patch skipped."
       ;;
 
-    *) echo "Invalid choice"; return ;;
+    *) echo "Invalid project type"; return ;;
   esac
-
-  echo ""
-  echo "⚙️  Auto-patching project configs..."
-  _ui_patch_tsconfig
-  _ui_patch_viteconfig
 
   echo ""
   echo "---------------------------------------------------"
