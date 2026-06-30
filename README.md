@@ -391,6 +391,9 @@ gwip "add auth middleware"   # Custom message
 | `css`   | Auto-detect package manager and install Tailwind CSS + `clsx` + `tailwind-merge` |
 | `run`   | Interactive JS/TS file runner via Bun                                            |
 | `pg`    | Generate `package.json` for current project                                      |
+| `makecpp`| Advance C/C++ boilerplate generator (auto cd, makefile, git, vscode)             |
+| `make run`| Compile and run the generated C/C++ project                                      |
+| `make clean`| Remove compiled binary file                                                      |
 
 #### `vite` example flow:
 

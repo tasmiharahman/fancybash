@@ -1291,6 +1291,12 @@ keep() {
     print_cmd "css" "Auto-install Tailwind CSS" "" "$BLUE"
     print_cmd "run" "Bun Run JS & TS File (Interactive)" "" "$YELLOW"
 
+    # ==================== C / C++ ====================
+    print_category "$ICON_GEAR" "C/C++ DEVELOPMENT" "$CYAN"
+    print_cmd "makecpp" "C/C++ boilerplate (cd, git, vscode)" "makecpp proj_name" "$BLUE"
+    print_cmd "make run" "Compile and run the C/C++ project" "" "$GREEN"
+    print_cmd "make clean" "Remove compiled binary file" "" "$RED"
+
     # ==================== SYSTEM ====================
     print_category "$ICON_GEAR" "SYSTEM & MAINTENANCE" "$BLUE"
     print_cmd "update" "Update system packages" "" "$GREEN"
