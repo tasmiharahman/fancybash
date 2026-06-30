@@ -14,22 +14,32 @@ NATIVE_DIR="$HOME/.config/zed"
 # ── Settings payload ──────────────────────────────────────────
 read -r -d '' SETTINGS <<'JSON' || true
 {
+  "agent_servers": {
+    "opencode": {
+      "type": "registry",
+    },
+  },
+  "agent": {
+    "dock": "right",
+    "favorite_models": [],
+    "model_parameters": [],
+  },
   "instrumentation": {
     "performance_profiler": {
-      "enabled": true
-    }
+      "enabled": true,
+    },
   },
   "proxy": "",
   "focus_follows_mouse": {
-    "enabled": true
+    "enabled": true,
   },
   "which_key": {
-    "enabled": false
+    "enabled": false,
   },
   "icon_theme": {
     "mode": "dark",
     "light": "Material Icon Theme",
-    "dark": "Material Icon Theme"
+    "dark": "Material Icon Theme",
   },
   "base_keymap": "VSCode",
   "selection_highlight": true,
@@ -48,109 +58,128 @@ read -r -d '' SETTINGS <<'JSON' || true
   "ui_font_size": 20,
   "buffer_font_size": 22.0,
   "buffer_font_family": "Cascadia Code",
-  "buffer_font_fallbacks": ["JetBrains Mono", "Fira Code", "Operator Mono"],
+  "buffer_font_fallbacks": ["JetBrains Mono", "Fira Code"],
   "session": {
-    "trust_all_worktrees": true
+    "trust_all_worktrees": true,
   },
   "project_panel": {
+    "dock": "left",
     "auto_fold_dirs": false,
     "hide_root": false,
     "git_status_indicator": true,
     "diagnostic_badges": true,
-    "bold_folder_labels": true
+    "bold_folder_labels": true,
   },
   "preview_tabs": {
     "enabled": false,
     "enable_preview_from_file_finder": false,
-    "enable_preview_multibuffer_from_code_navigation": true
+    "enable_preview_multibuffer_from_code_navigation": true,
   },
   "status_bar": {
     "line_endings_button": true,
     "experimental.show": true,
-    "show_active_file": true
+    "show_active_file": true,
   },
   "sticky_scroll": {
-    "enabled": false
+    "enabled": false,
   },
   "minimap": {
-    "show": "always"
+    "show": "always",
   },
   "scrollbar": {
     "axes": {
-      "horizontal": false
-    }
+      "horizontal": false,
+    },
   },
   "file_types": {
-    "html": [
-      "*html",
-      "*njk",
-      "*.ejs"
-    ]
+    "html": ["*html", "*njk", "*.ejs"],
   },
   "theme": {
     "mode": "dark",
     "light": "Everforest Light Hard (blur)",
-    "dark": "One Dark"
+    "dark": "Colorizer Pro",
   },
   "terminal": {
     "copy_on_select": true,
     "blinking": "on",
     "cursor_shape": "block",
     "line_height": {
-      "custom": 1.3
+      "custom": 1.3,
     },
-    "font_fallbacks": [
-      "JetBrains Mono",
-      "FiraCode Nerd Font"
-    ],
+    "font_fallbacks": ["JetBrains Mono", "FiraCode Nerd Font"],
     "font_family": "Cascadia Code",
     "font_size": 22.0,
     "env": {
-      "LD_LIBRARY_PATH": ""
+      "LD_LIBRARY_PATH": "",
     },
     "toolbar": {
-      "breadcrumbs": true
+      "breadcrumbs": true,
     },
-    "show_count_badge": true
+    "show_count_badge": true,
   },
   "git": {
     "inline_blame": {
-      "show_commit_summary": true
-    }
+      "show_commit_summary": true,
+    },
   },
   "notification_panel": {
-    "show_count_badge": true
+    "show_count_badge": true,
   },
   "git_panel": {
     "tree_view": true,
     "sort_by_path": true,
     "show_count_badge": true,
-    "file_icons": true
+    "file_icons": true,
   },
   "tabs": {
     "file_icons": true,
-    "git_status": true
+    "git_status": true,
   },
   "title_bar": {
     "show_menus": false,
-    "show_branch_status_icon": true
+    "show_branch_status_icon": true,
   },
   "diagnostics": {
     "inline": {
-      "enabled": true
-    }
+      "enabled": true,
+    },
   },
   "prettier": {
-    "allowed": true
+    "allowed": true,
   },
   "inlay_hints": {
     "show_background": true,
-    "enabled": true
+    "enabled": true,
   },
   "toolbar": {
-    "code_actions": true
-  }
+    "code_actions": true,
+  },
+
+
+  "format_on_save": "on",
+  "formatter": "prettier",
+  "languages": {
+    "JavaScript": {
+      "code_actions_on_format": {
+        "source.organizeImports": true,
+      },
+    },
+    "TypeScript": {
+      "code_actions_on_format": {
+        "source.organizeImports": true,
+      },
+    },
+    "TSX": {
+      "code_actions_on_format": {
+        "source.organizeImports": true,
+      },
+    },
+    "HTML": {
+      "formatter": "prettier",
+    },
+  },
 }
+
 JSON
 
 # ── Helper ────────────────────────────────────────────────────
