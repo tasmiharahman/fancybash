@@ -486,24 +486,45 @@ uu
 
 ```
 fancybash/
-├── install.sh          # Bash installer with spinner & backup
-├── install.zsh         # Zsh installer with spinner & backup
-├── install.ps1         # PowerShell installer with backup & profile integration
-├── config.sh           # Bash configuration, aliases, prompt, colors
-├── config.zsh          # Zsh configuration, aliases, prompt, colors
-├── config.ps1          # PowerShell configuration, aliases, prompt, colors
-├── web/
-│   ├── index.html      # Landing page (fancybash.netlify.app)
-│   ├── style.css       # Design system & responsive styles
-│   ├── main.js         # Interactive tabs, animations, copy buttons
-│   ├── linux-setup.html# Linux App Ecosystem page
-│   ├── linux-setup.css # Linux App Ecosystem styles
-│   ├── linux-setup.js  # Linux App Ecosystem logic
-│   └── linux-setup-README.md
+│
+├── config.sh               # ★ Bash configuration — aliases, prompt, functions
+├── config.zsh              # ★ Zsh configuration — full port of config.sh
+├── config.ps1              # ★ PowerShell configuration (in progress)
+│
+├── install.sh              # Bash installer — spinner, backup, idempotency guard
+├── install.zsh             # Zsh installer — same logic, targets ~/.zshrc
+├── install.ps1             # PowerShell installer — targets $PROFILE
+│
+├── web/                    # Static website (fancybash.netlify.app)
+│   ├── index.html          #   Landing page (all-in-one, ~76KB)
+│   ├── style.css           #   Design system — glassmorphism, dark theme
+│   ├── main.js             #   Tabs, copy buttons, scroll animations
+│   ├── linux-setup.html    #   Linux App Ecosystem sub-page
+│   ├── linux-setup.css     #   Styles for linux-setup page
+│   └── linux-setup.js      #   Search & filter logic for app browser
+│
 ├── zed/
-│   └── install-settings.sh  # Zed IDE settings installer (Flatpak + native)
-├── README.md           # You are here
-└── LICENSE             # MIT — free to use, fork, and modify
+│   └── install-settings.sh #   Zed IDE settings installer (Flatpak + native)
+│
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md          # Structured bug report form
+│   │   ├── feature_request.md     # Feature request form
+│   │   └── documentation.md       # Documentation issue form
+│   ├── PULL_REQUEST_TEMPLATE.md   # PR checklist for contributors
+│   └── workflows/
+│       ├── label.yml              # Auto-labeler for pull requests
+│       └── summary.yml            # PR/issue summary automation
+│
+├── README.md               # User-facing documentation (you are here)
+├── ARCHITECTURE.txt        # Contributor system design & code map
+├── CONTRIBUTING.md         # How to contribute — workflow, standards, PR guide
+├── CHANGELOG.md            # Version history — all notable changes per release
+├── SECURITY.md             # Vulnerability reporting policy & scope
+├── CODE_OF_CONDUCT.md      # Community behavior standards
+├── LICENSE                 # MIT — free to use, fork, and modify
+├── .prettierrc             # Prettier config for web/ files
+└── .prettierignore         # Files excluded from Prettier formatting
 ```
 
 ### How the installer works
