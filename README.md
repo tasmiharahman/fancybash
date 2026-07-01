@@ -53,6 +53,7 @@ _Beautiful • Fast • Smart • Zero Bloat_
   - [🔧 Project Setup](#-project-initialization)
   - [⚙️ System Tools](#-system--maintenance)
   - [🔨 Utilities](#-utility-tools)
+  - [🐳 Docker & Containers](#-docker--containers)
 - [🏗️ Project Structure](#️-project-structure)
 - [🖥️ Zed IDE Settings](#️-zed-ide-settings)
 - [🐧 Linux App Ecosystem](#-linux-app-ecosystem)
@@ -633,6 +634,129 @@ This page has been integrated into the main `fancybash` website and can be acces
 | **wget** | DEB | Network File Retrieval |
 
 </details>
+
+---
+
+## 🐳 Docker & Containers
+
+> fancybash includes **The Ultimate Docker Swiss Army Knife** — a full suite of aliases and smart functions for managing containers, images, volumes, and services.
+
+### 📊 Status & Monitoring
+
+| Command | Description |
+| ------- | ----------- |
+| `dps` | List running containers (clean table format) |
+| `dpsa` | List **all** containers including stopped ones |
+| `di` | List all downloaded Docker images |
+| `dvl` | List all Docker volumes |
+| `dnl` | List all Docker networks |
+| `dsize` | Inspect total Docker disk usage |
+| `dtop` | Live resource monitor — CPU, RAM, Net & Block I/O |
+
+#### Sudo variants (for rootless-mode setups)
+
+| Command | Description |
+| ------- | ----------- |
+| `sdps` / `sdpsa` | `sudo` versions of `dps` / `dpsa` |
+| `sdi` | `sudo docker images` |
+| `sdvl` / `sdnl` | `sudo` volume / network list |
+| `sdsize` / `sdtop` | `sudo` disk usage / live stats |
+
+---
+
+### ⚡ Service Control
+
+| Command | Description |
+| --------- | ----------- |
+| `dstart` | Start the Docker service |
+| `doff` | Stop the Docker service |
+| `dstatus` | Check Docker service status |
+| `denable` | Enable Docker auto-start on boot (docker + docker.socket) |
+| `ddisable` | Disable Docker auto-start on boot |
+
+---
+
+### 🔄 Container Lifecycle
+
+| Command | Description |
+| ----------- | ----------- |
+| `dstop <name>` | Stop a container |
+| `drm <name>` | Remove a container |
+| `drmi <image>` | Remove an image |
+| `drestart <name>` | Restart a container |
+| `dkill <name>` | Force stop + delete a container in one command |
+| `dstopall` | Stop **all** running containers at once |
+| `drmall` | Remove **all** stopped containers at once |
+
+---
+
+### 🐛 Debugging & Building
+
+| Command | Description | Example |
+| ------- | ----------- | ------- |
+| `dsh <name>` | Open an interactive shell inside a container | `dsh myapp` |
+| `dlogs <name>` | Follow live logs of a container | `dlogs myapp` |
+| `dbuild <tag>` | Build a Docker image with a tag | `dbuild myapp .` |
+| `dbuild-nocache <tag>` | Build image from scratch (no cache) | `dbuild-nocache myapp .` |
+| `dhist <image>` | View image layer history | `dhist myapp` |
+| `dports <name>` | Check open port bindings of a container | `dports myapp` |
+
+---
+
+### 🧩 Docker Compose
+
+| Command | Description |
+| ------- | ----------- |
+| `dcup` | Start services in detached mode (`docker compose up -d`) |
+| `dcdn` | Stop and remove services (`docker compose down`) |
+| `dclogs` | Follow compose service logs |
+| `dcupb` | Rebuild images and start services (`up -d --build`) |
+
+---
+
+### 🧪 Quick Test Sandboxes
+
+Spin up a temporary container that **auto-deletes on exit**:
+
+| Command | Launches |
+| -------------- | -------- |
+| `dtest-ubuntu` | `ubuntu:latest` with bash |
+| `dtest-node` | `node:alpine` with sh |
+| `dtest-alpine` | `alpine:latest` with sh |
+
+---
+
+### 🧠 Advanced Functions
+
+| Function | Usage | Description |
+| -------- | ----- | ----------- |
+| `dfind <term>` | `dfind nginx` | Search containers and images by name |
+| `droot <name>` | `droot myapp` | Enter container as **root** user |
+| `dip <name>` | `dip myapp` | Show container's local IP address |
+| `dwatch <name>` | `dwatch myapp` | Live-track filesystem changes inside container |
+| `dnetstat <name>` | `dnetstat myapp` | Show active network connections inside container |
+| `dtop-proc <name>` | `dtop-proc myapp` | Show process tree inside container |
+| `dbackup <vol> <file>` | `dbackup mydata backup.tar` | Backup a Docker volume as a `.tar` file |
+| `dkill-force` | `dkill-force` | Interactively force-kill **all** running containers |
+| `dclean` | `dclean` | Deep clean — removes all unused containers, images, volumes & networks |
+
+#### `dclean` — Deep Clean
+
+```bash
+dclean
+# 🧹 Performing deep clean of all unused Docker resources...
+# → docker system prune -a --volumes -f
+# ✨ System optimization complete!
+```
+
+#### `dbackup` — Volume Backup
+
+```bash
+dbackup mydata backup.tar
+# Backs up 'mydata' volume to backup.tar in current directory
+```
+
+> 💡 **Tab Completion** is built-in — press `Tab` after `dsh`, `dlogs`, `dstop`, `dkill`, `drestart`, `dports`, `dwatch`, `dnetstat`, `dtop-proc` to auto-complete container names. Same for `drmi` and `dhist` with image names.
 
 ---
 
