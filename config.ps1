@@ -259,7 +259,6 @@ function keep {
     PrintCmd "gwip" "Quick WIP commit + push" "" "Magenta"
     Write-Host ""
 
-    
     # DOCKER
     PrintCategory "🐳" "DOCKER COMMANDS" "Blue"
     PrintCmd "d" "docker command" "" "Blue"
